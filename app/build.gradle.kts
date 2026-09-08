@@ -1,6 +1,8 @@
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
 
 android {
     namespace = "com.example.android_playground"
@@ -40,4 +42,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
 }
