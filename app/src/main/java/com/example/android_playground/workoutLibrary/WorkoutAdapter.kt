@@ -1,15 +1,18 @@
-package com.example.android_playground
+package com.example.android_playground.workoutLibrary
 
-
-import android.view.LayoutInflater  // For turning XML layout into actual view objects
-import android.view.View // Base class for UI elements
-import android.view.ViewGroup // View container which inherit view itself
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView // A catalogue area for displaying elements
-import android.widget.ImageButton
+import androidx.recyclerview.widget.RecyclerView
+import com.example.android_playground.R
+import com.example.android_playground.data.Workout
 
-
-class WorkoutAdapter( private val workouts: List<Workout>) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>()
+class WorkoutAdapter(
+    private val workouts: List<Workout>,
+    private val onDeleteClick: (Int) -> Unit
+) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>()
 {
     // @ description Prepare the data before passed to the recyclerView
 
@@ -20,8 +23,7 @@ class WorkoutAdapter( private val workouts: List<Workout>) : RecyclerView.Adapte
             itemView.findViewById(R.id.workoutName)
         val workoutDuration: TextView =
             itemView.findViewById(R.id.workoutDuration)
-
-        val deleteButton: ImageButton =
+        val deleteButton: Button =
             itemView.findViewById(R.id.deleteButton)
     }
 
@@ -30,10 +32,8 @@ class WorkoutAdapter( private val workouts: List<Workout>) : RecyclerView.Adapte
         parent: ViewGroup,
         viewType: Int
     ): WorkoutViewHolder {
-
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_workout, parent, false)
-
         return WorkoutViewHolder(view)
     }
 
@@ -42,12 +42,21 @@ class WorkoutAdapter( private val workouts: List<Workout>) : RecyclerView.Adapte
         holder: WorkoutViewHolder,
         position: Int
     ) {
+        // Fetch the workout
         val workout = workouts[position]
 
+        // Set the Holder Valeu
         holder.workoutName.text = workout.name
-        holder.workoutDuration.text = workout.duration
-        holder.deleteButton.setOnClickListener{
+        holder.workoutDuration.text = workout.duration.toString()
 
+        // Add deletion event listener
+        holder.deleteButton.setOnClickListener {
+
+            val currentPosition = holder.adapterPosition
+
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                onDeleteClick(currentPosition)
+            }
         }
     }
 

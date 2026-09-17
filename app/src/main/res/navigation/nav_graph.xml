@@ -8,30 +8,41 @@
 
     <fragment
         android:id="@+id/nav_library"
-        android:name="com.example.android_playground.WorkoutLibraryFragment"
-        android:label="Workout Library" />
+        android:name="com.example.android_playground.workoutLibrary.WorkoutLibraryFragment"
+        android:label="Workout Library">
+
+        <action
+            android:id="@+id/action_workoutLibraryFragment_to_createWorkoutFragment"
+            app:destination="@id/createWorkoutFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_tracker"
-        android:name="com.example.android_playground.WorkoutTrackerFragment"
+        android:name="com.example.android_playground.Others.WorkoutTrackerFragment"
         android:label="Workout Tracker"
         tools:layout="@layout/fragment_workout_tracker" />
 
     <fragment
         android:id="@+id/nav_plan"
-        android:name="com.example.android_playground.WorkoutPlanFragment"
+        android:name="com.example.android_playground.Others.WorkoutPlanFragment"
         android:label="Workout Plan" />
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.example.android_playground.ProgressHistoryFragment"
+        android:name="com.example.android_playground.Others.ProgressHistoryFragment"
         android:label="Progress History"
         tools:layout="@layout/fragment_progress_history" />
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.example.android_playground.UserProfileFragment"
+        android:name="com.example.android_playground.Others.UserProfileFragment"
         android:label="User Profile"
         tools:layout="@layout/fragment_user_profile" />
 
+
+    <fragment
+        android:id="@+id/createWorkoutFragment"
+        android:name="com.example.android_playground.workoutLibrary.CreateWorkoutFragment"
+        android:label="Create Workout" />
 </navigation>
