@@ -1,4 +1,4 @@
-package com.example.android_playground.workoutLibrary
+package com.example.android_playground.exercise
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.example.android_playground.data.Workout
 
 class WorkoutAdapter(
     private val workouts: List<Workout>,
-    private val onDeleteClick: (Int) -> Unit
+    private val onDeleteClick: (Workout) -> Unit
 ) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>()
 {
     // @ description Prepare the data before passed to the recyclerView
@@ -51,12 +51,7 @@ class WorkoutAdapter(
 
         // Add deletion event listener
         holder.deleteButton.setOnClickListener {
-
-            val currentPosition = holder.adapterPosition
-
-            if (currentPosition != RecyclerView.NO_POSITION) {
-                onDeleteClick(currentPosition)
-            }
+            onDeleteClick(workout)
         }
     }
 

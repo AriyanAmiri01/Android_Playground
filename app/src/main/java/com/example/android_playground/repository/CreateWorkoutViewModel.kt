@@ -1,4 +1,6 @@
 package com.example.android_playground.repository
+// @ description: Handles exercise entities
+
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

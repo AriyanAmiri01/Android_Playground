@@ -11,13 +11,19 @@ import com.example.android_playground.data.WorkoutDatabase
 import kotlinx.coroutines.launch
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.example.android_playground.exercise.WorkoutAdapter
+import androidx.lifecycle.ViewModelProvider
+import com.example.android_playground.repository.WorkoutLibraryViewModel
+import com.example.android_playground.repository.WorkoutLibraryViewModelFactory
+import com.example.android_playground.repository.WorkoutRepository
+import com.example.android_playground.data.Workout
 
 
 class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
 
 
 
-
+    private lateinit var viewModel: WorkoutLibraryViewModel
 
 
 
@@ -36,6 +42,15 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
         val workoutDao =
             database.workoutDao()
 
+        // ROOM COMMUNICATIONS
+        val workoutRepository = WorkoutRepository(
+            database.workoutDao())
+        val workoutFactory = WorkoutLibraryViewModelFactory(
+            workoutRepository)
+        viewModel = ViewModelProvider(
+            this, workoutFactory)[WorkoutLibraryViewModel::class.java]
+
+
         // Create the recyclerView
         val recyclerView =
             view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
@@ -44,28 +59,48 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
         recyclerView.layoutManager =
             GridLayoutManager(requireContext(), 2)
 
-        // Lounch a corouting to fetch the data
-        viewLifecycleOwner.lifecycleScope.launch {
-            val workouts = workoutDao.getAllWorkouts()
+        loadWorkouts()
 
-            // Fill the adapter
-            recyclerView.adapter =
-                WorkoutAdapter(workouts) { position ->
-
-                }
-        }
-
-        // Get createWorkoutButton
         val createWorkoutButton =
-            view.findViewById<Button>(R.id.createWorkoutButton)
+            view.findViewById<Button>(
+                R.id.createWorkoutButton
+            )
 
-        // Implement createWorkoutButton logic
         createWorkoutButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_workoutLibraryFragment_to_createWorkoutFragment
             )
         }
-
-
     }
+
+
+    private fun loadWorkouts() {
+
+        val database =
+            WorkoutDatabase.getDatabase(requireContext())
+
+        val workoutDao =
+            database.workoutDao()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            val workouts =
+                workoutDao.getAllWorkouts()
+
+            val adapter = WorkoutAdapter(
+                workouts = workouts,
+                onDeleteClick = { workout ->
+
+                    viewModel.deleteWorkout(workout) {
+                        loadWorkouts()
+                    }
+                }
+            )
+
+            view?.findViewById<RecyclerView>(
+                R.id.workoutRecyclerView
+            )?.adapter = adapter
+        }
+    }
+
 }

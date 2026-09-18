@@ -3,7 +3,7 @@ package com.example.android_playground.repository
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android_playground.repository.WorkoutRepository
+import com.example.android_playground.repository.ExerciseRepository
 
 
 // @ description: It is the class for creating the createWorkoutViewModel using exerciseRepository

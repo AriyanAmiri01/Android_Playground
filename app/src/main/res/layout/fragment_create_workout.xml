@@ -13,6 +13,13 @@
         android:layout_height="48dp"
         android:hint="Workout name"
         android:inputType="text" />
+    <EditText
+        android:id="@+id/workoutDurationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:hint="Duration (minutes)"
+        android:inputType="number" />
 
     <TextView
         android:layout_width="match_parent"
