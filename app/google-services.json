@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414738649775",
+    "project_id": "firbase-playground4",
+    "storage_bucket": "firbase-playground4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414738649775:android:b3d67628e241d789a9fa5a",
+        "android_client_info": {
+          "package_name": "com.example.android_playground"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9bPdJ4BD_P7Ta5zt0lQP6fcaD47O1P7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
