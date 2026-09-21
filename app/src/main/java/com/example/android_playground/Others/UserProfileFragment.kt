@@ -37,8 +37,13 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
             // Log the user out
             viewModel.logoutUser()
 
+            // Navigating back to the login fragment and clearing the backstack
             findNavController().navigate(
-                R.id.loginFragment
+                R.id.loginFragment,
+                null,
+                androidx.navigation.NavOptions.Builder()
+                    .setPopUpTo(R.id.nav_library, true)
+                    .build()
             )
         }
     }
