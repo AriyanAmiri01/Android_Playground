@@ -1,7 +1,7 @@
 package com.example.android_playground.repository
 
 import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.auth.FirebaseUser
 
 
 class AuthRepository {
@@ -44,8 +44,8 @@ class AuthRepository {
         firebaseAuth.signOut()
     }
 
-    fun getCurrentUser(){
-        firebaseAuth.currentUser
+    fun getCurrentUser() : FirebaseUser?{
+        return firebaseAuth.currentUser
     }
 
 
