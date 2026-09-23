@@ -11,11 +11,19 @@ import com.example.android_playground.R
 import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
+import com.bumptech.glide.Glide
+
+import android.net.Uri
+import android.widget.ImageView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 
 class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
 
     // For Firebase connection
-    private lateinit var viewModel : AuthViewModel;
+    private lateinit var viewModel : AuthViewModel
+
+    private lateinit var profileImage : ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Call the childern proccesses
@@ -33,6 +41,7 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
             factory)[AuthViewModel::class.java]
 
         // Get Views
+        profileImage = view.findViewById(R.id.profileImage)
         val profileName = view.findViewById<TextView>(R.id.profileName)
         val profileUsername = view.findViewById<TextView>(R.id.profileUsername)
         val logoutButton = view.findViewById<Button>(R.id.logoutButton)
@@ -47,6 +56,16 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
             loginButton,
             notLoggedInText
         )
+        // Profile  image update
+        profileImage.setOnClickListener {
+            if(viewModel.isUserLoggedIn()){
+                profilePicturePicker.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+        }
 
         // Implement logout button
         logoutButton.setOnClickListener {
@@ -68,24 +87,6 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
             // Update UI
             findNavController().navigate(
                 R.id.loginFragment
-            )
-        }
-
-
-
-
-
-        logoutButton.setOnClickListener {
-            // Log the user out
-            viewModel.logoutUser()
-
-            // Navigating back to the login fragment and clearing the backstack
-            findNavController().navigate(
-                R.id.loginFragment,
-                null,
-                androidx.navigation.NavOptions.Builder()
-                    .setPopUpTo(R.id.nav_library, true)
-                    .build()
             )
         }
     }
@@ -111,16 +112,39 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
 
             //profileName.text = user.displayName ?: "User"
             //profileUsername.text = user.email ?: "No email"
+
+            if(user.photoUrl != null){
+                Glide.with(this)
+                    .load(user.photoUrl)
+                    .into(profileImage)
+            }
         }else{
             // User is not authenticated
             profileName.visibility = View.GONE
             profileUsername.visibility = View.GONE
             logoutButton.visibility = View.GONE
-
             loginButton.visibility = View.VISIBLE
             notLoggedInText.visibility = View.VISIBLE
         }
     }
 
 
+    // PICTURE PICKER
+    private val profilePicturePicker =
+        registerForActivityResult(  // Launch another activity and later give me its result
+            ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->   // Let the user select the media
+            if (uri != null) {
+
+                viewModel.uploadProfilePicture(uri) { success, error ->
+
+                    if (success) {
+                        // Show the selected image immediately
+                        profileImage.setImageURI(uri)
+                    } else {
+                        // Upload failed
+                        // We will handle the error properly later
+                    }
+                }
+            }
+        }
 }

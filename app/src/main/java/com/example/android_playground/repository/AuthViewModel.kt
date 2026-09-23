@@ -1,5 +1,6 @@
 package com.example.android_playground.repository
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,9 +44,21 @@ class AuthViewModel(
 
 
     // STATE MANAGEMENT
+    ////////////////////////////////
     fun isUserLoggedIn() : Boolean{
         return repository.getCurrentUser() != null
     }
 
     fun getCurrentUser() = repository.getCurrentUser()
+
+    // STORAGE
+    ////////////////////////////////
+    fun uploadProfilePicture(
+        imageUri: Uri,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        repository.uploadProfilePicture(imageUri, onResult)
+    }
+
+
 }
