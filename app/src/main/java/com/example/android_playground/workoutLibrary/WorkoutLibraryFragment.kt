@@ -18,6 +18,13 @@ import com.example.android_playground.repository.WorkoutLibraryViewModelFactory
 import com.example.android_playground.repository.WorkoutRepository
 import com.example.android_playground.data.Workout
 
+// FIRESTORE STUFF
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.android_playground.repository.FirestoreWorkoutRepository
+import com.example.android_playground.repository.FirestoreWorkoutViewModel
+import com.example.android_playground.repository.FirestoreWorkoutViewModelFactory
 
 class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
 
@@ -25,7 +32,11 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
 
     private lateinit var viewModel: WorkoutLibraryViewModel
 
-
+    private val firestoreWorkoutViewModel : FirestoreWorkoutViewModel by viewModels{
+        FirestoreWorkoutViewModelFactory(
+            FirestoreWorkoutRepository()
+        )
+    }
 
     override fun onViewCreated(
         view: View,
@@ -34,13 +45,23 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
         // Notify the childrens?
         super.onViewCreated(view, savedInstanceState)
 
+        firestoreWorkoutViewModel.getWorkouts()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                firestoreWorkoutViewModel.workouts.collect { workouts ->
+
+                    workouts.forEach { workout ->
+                        println(
+                            "Firestore workout: ${workout.id} - ${workout.name}"
+                        )
+                    }
+                }
+            }
+        }
+
         // Get the database
         val database =
             WorkoutDatabase.getDatabase(requireContext())
-
-        // Get workoutDao
-        val workoutDao =
-            database.workoutDao()
 
         // ROOM COMMUNICATIONS
         val workoutRepository = WorkoutRepository(
