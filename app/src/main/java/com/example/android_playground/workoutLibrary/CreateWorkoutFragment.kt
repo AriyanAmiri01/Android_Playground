@@ -18,13 +18,11 @@ import com.example.android_playground.repository.WorkoutViewModelFactory
 import com.example.android_playground.repository.WorkoutRepository
 import android.widget.Button
 import android.widget.EditText
-import androidx.lifecycle.lifecycleScope
 import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
-import kotlinx.coroutines.launch
 
 
-class CreateWorkoutFragment : Fragment(R.layout.fragment_create_workout) {
+class CreateWorkoutFragment : Fragment(R.layout.sub_frag_create_workout) {
 
 
     private val selectedExercises = mutableListOf<Exercise>()

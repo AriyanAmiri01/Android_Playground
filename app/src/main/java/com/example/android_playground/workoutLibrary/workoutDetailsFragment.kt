@@ -15,9 +15,8 @@ import com.example.android_playground.exercise.WorkoutExerciseAdapter
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
-import com.example.android_playground.repository.WorkoutRepository
 
-class WorkoutDetailsFragment : Fragment(R.layout.fragment_workout_details) {
+class WorkoutDetailsFragment : Fragment(R.layout.sub_frag_workout_details) {
 
     private lateinit var viewModel: ExerciseViewModel
     private lateinit var adapter: WorkoutExerciseAdapter

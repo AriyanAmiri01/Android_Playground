@@ -14,7 +14,7 @@ import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
 import androidx.navigation.fragment.findNavController
 
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : Fragment(R.layout.sub_frag_login) {
 
     private lateinit var viewModel : AuthViewModel
 
@@ -76,7 +76,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 ).show()
 
                 findNavController().navigate(
-                    R.id.action_loginFragment_to_nav_library
+                    R.id.action_loginFragment_to_nav_workout
                 )
 
 

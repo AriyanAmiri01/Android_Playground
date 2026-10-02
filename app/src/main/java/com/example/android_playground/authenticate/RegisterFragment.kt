@@ -13,7 +13,7 @@ import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
 
-class RegisterFragment : Fragment(R.layout.fragment_register){
+class RegisterFragment : Fragment(R.layout.sub_frag_register){
     private lateinit var viewModel : AuthViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Calling the child's onViewCreated functions
@@ -70,7 +70,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register){
                 ).show()
 
                 findNavController().navigate(
-                    R.id.action_registerFragment_to_nav_library
+                    R.id.action_registerFragment_to_nav_workout
                 )
 
             } else {

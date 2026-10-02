@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         // State check
         val repository = AuthRepository()
         if (repository.getCurrentUser() != null) {
-            navController.navigate(R.id.nav_library)
+            navController.navigate(R.id.nav_workout)
         }else{
             navController.navigate(R.id.loginFragment)
         }

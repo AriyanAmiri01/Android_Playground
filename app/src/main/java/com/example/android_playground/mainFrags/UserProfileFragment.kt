@@ -1,24 +1,24 @@
-package com.example.android_playground.Others
+package com.example.android_playground.mainFrags
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.android_playground.R
 import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
-import com.bumptech.glide.Glide
 
-import android.net.Uri
-import android.widget.ImageView
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-
-class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
+class UserProfileFragment : Fragment(R.layout.main_frag_user_profile){
 
     // For Firebase connection
     private lateinit var viewModel : AuthViewModel
@@ -38,7 +38,8 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
         // Get the viewModel
         viewModel = ViewModelProvider(
             this,
-            factory)[AuthViewModel::class.java]
+            factory
+        )[AuthViewModel::class.java]
 
         // Get Views
         profileImage = view.findViewById(R.id.profileImage)
@@ -76,8 +77,8 @@ class UserProfileFragment : Fragment(R.layout.fragment_user_profile){
             findNavController().navigate(
                 R.id.loginFragment,
                 null,
-                androidx.navigation.NavOptions.Builder()
-                    .setPopUpTo(R.id.nav_library, true)
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.nav_workout, true)
                     .build()
             )
         }

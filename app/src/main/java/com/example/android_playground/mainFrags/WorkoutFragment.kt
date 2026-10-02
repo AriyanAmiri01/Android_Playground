@@ -1,27 +1,25 @@
-package com.example.android_playground.workoutLibrary
+package com.example.android_playground.mainFrags
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
-import kotlinx.coroutines.launch
-import android.widget.Button
-import androidx.navigation.fragment.findNavController
 import com.example.android_playground.exercise.WorkoutAdapter
-import androidx.lifecycle.ViewModelProvider
+import com.example.android_playground.repository.WorkoutRepository
 import com.example.android_playground.repository.WorkoutViewModel
 import com.example.android_playground.repository.WorkoutViewModelFactory
-import com.example.android_playground.repository.WorkoutRepository
+import kotlinx.coroutines.launch
 
-// FIRESTORE STUFF
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
-
-class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
+class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
 
     // Room + Firestore
     private lateinit var viewModel: WorkoutViewModel
