@@ -5,17 +5,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.tasks.await
 
 class AuthRepository {
-
+    /// FIREBASE INSTANCES
+    /////////////////////////////
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseStorage = FirebaseStorage.getInstance()
 
-    fun registerUser(
-        email : String,
-        password : String,
-        onResult : (Boolean, String?) -> Unit
-    ){
+
+    /// AUTHENTICATION
+    /////////////////////////////
+    fun registerUser(email : String, password : String, onResult : (Boolean, String?) -> Unit){
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if( task.isSuccessful){
@@ -25,12 +26,7 @@ class AuthRepository {
                 }
             }
     }
-
-    fun loginUser(
-        email: String,
-        password: String,
-        onResult: (Boolean, String?) -> Unit
-    ) {
+    fun loginUser(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         firebaseAuth
             .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -42,19 +38,17 @@ class AuthRepository {
                 }
             }
     }
-
     fun logoutUser(){
         firebaseAuth.signOut()
     }
-
     fun getCurrentUser() : FirebaseUser?{
         return firebaseAuth.currentUser
     }
 
-    fun uploadProfilePicture(
-        imageUri : Uri,
-        onResult : (Boolean, String?) -> Unit
-    ) {
+
+    /// STORAGE
+    ////////////////////////////////
+    fun uploadProfilePicture(imageUri : Uri, onResult : (Boolean, String?) -> Unit) {
         // Get the currently logged-in user
         val user = firebaseAuth.currentUser
 
@@ -104,6 +98,12 @@ class AuthRepository {
                 onResult(false, exception.message)
             }
     }
+
+    suspend fun getDownloadUrl(storagePath : String) : String{
+        val storageReference = firebaseStorage.getReferenceFromUrl(storagePath)
+        return storageReference.downloadUrl.await().toString()
+    }
+
 
 
 }

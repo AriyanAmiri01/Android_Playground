@@ -13,30 +13,20 @@ import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.android_playground.exercise.WorkoutAdapter
 import androidx.lifecycle.ViewModelProvider
-import com.example.android_playground.repository.WorkoutLibraryViewModel
-import com.example.android_playground.repository.WorkoutLibraryViewModelFactory
+import com.example.android_playground.repository.WorkoutViewModel
+import com.example.android_playground.repository.WorkoutViewModelFactory
 import com.example.android_playground.repository.WorkoutRepository
-import com.example.android_playground.data.Workout
 
 // FIRESTORE STUFF
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.android_playground.repository.FirestoreWorkoutRepository
-import com.example.android_playground.repository.FirestoreWorkoutViewModel
-import com.example.android_playground.repository.FirestoreWorkoutViewModelFactory
 
 class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
 
+    // Room + Firestore
+    private lateinit var viewModel: WorkoutViewModel
 
 
-    private lateinit var viewModel: WorkoutLibraryViewModel
-
-    private val firestoreWorkoutViewModel : FirestoreWorkoutViewModel by viewModels{
-        FirestoreWorkoutViewModelFactory(
-            FirestoreWorkoutRepository()
-        )
-    }
 
     override fun onViewCreated(
         view: View,
@@ -45,48 +35,65 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
         // Notify the childrens?
         super.onViewCreated(view, savedInstanceState)
 
-        firestoreWorkoutViewModel.getWorkouts()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                firestoreWorkoutViewModel.workouts.collect { workouts ->
+        // Get the database
+        val database = WorkoutDatabase.getDatabase(requireContext())
 
-                    workouts.forEach { workout ->
-                        println(
-                            "Firestore workout: ${workout.id} - ${workout.name}"
-                        )
-                    }
+        // ROOM COMMUNICATIONS
+        val workoutRepository = WorkoutRepository(database.workoutDao())
+        val workoutFactory = WorkoutViewModelFactory(workoutRepository)
+        viewModel = ViewModelProvider(this, workoutFactory)[WorkoutViewModel::class.java]
+
+        // Create the recyclerView
+        val recyclerView = view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+
+        // Observe workouts
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewModel.syncWorkouts()
+
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+
+                viewModel.getAllWorkouts().collect { workouts ->
+
+                    val adapter = WorkoutAdapter(
+                        workouts = workouts,
+
+                        onDeleteClick = { workout ->
+                            viewModel.deleteWorkout(workout) {
+                            }
+                        },
+
+                        onWorkoutClick = { workout ->
+
+                            val bundle = Bundle().apply {
+                                putInt(
+                                    "workoutId",
+                                    workout.id
+                                )
+                            }
+
+                            findNavController().navigate(
+                                R.id.action_workoutLibraryFragment_to_workoutDetailsFragment,
+                                bundle
+                            )
+                        }
+                    )
+
+                    recyclerView.adapter = adapter
                 }
             }
         }
 
-        // Get the database
-        val database =
-            WorkoutDatabase.getDatabase(requireContext())
 
-        // ROOM COMMUNICATIONS
-        val workoutRepository = WorkoutRepository(
-            database.workoutDao())
-        val workoutFactory = WorkoutLibraryViewModelFactory(
-            workoutRepository)
-        viewModel = ViewModelProvider(
-            this, workoutFactory)[WorkoutLibraryViewModel::class.java]
-
-
-        // Create the recyclerView
-        val recyclerView =
-            view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
-
-        // Config the grid layout of the recyclerView
-        recyclerView.layoutManager =
-            GridLayoutManager(requireContext(), 2)
-
-        loadWorkouts()
-
+        // Create workout button
         val createWorkoutButton =
             view.findViewById<Button>(
                 R.id.createWorkoutButton
             )
-
         createWorkoutButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_workoutLibraryFragment_to_createWorkoutFragment
@@ -95,33 +102,5 @@ class WorkoutLibraryFragment : Fragment(R.layout.fragment_workout_library) {
     }
 
 
-    private fun loadWorkouts() {
-
-        val database =
-            WorkoutDatabase.getDatabase(requireContext())
-
-        val workoutDao =
-            database.workoutDao()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-
-            val workouts =
-                workoutDao.getAllWorkouts()
-
-            val adapter = WorkoutAdapter(
-                workouts = workouts,
-                onDeleteClick = { workout ->
-
-                    viewModel.deleteWorkout(workout) {
-                        loadWorkouts()
-                    }
-                }
-            )
-
-            view?.findViewById<RecyclerView>(
-                R.id.workoutRecyclerView
-            )?.adapter = adapter
-        }
-    }
 
 }

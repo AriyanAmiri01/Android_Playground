@@ -22,41 +22,28 @@ class AuthViewModel(
 
     // AUTHENTICATION
     /////////////////////////////
-    fun registerUser(
-        email : String,
-        password : String
-    ){
+    fun registerUser(email : String, password : String){
         repository.registerUser(email, password){ success, error ->
             _authResult.value = Pair(success, error)
         }
     }
-
     fun loginUser(email: String, password: String) {
         repository.loginUser(email, password) { success, error ->
             _authResult.value = Pair(success, error)
         }
     }
-
     fun logoutUser(){
         repository.logoutUser()
     }
-
-
-
-    // STATE MANAGEMENT
-    ////////////////////////////////
     fun isUserLoggedIn() : Boolean{
         return repository.getCurrentUser() != null
     }
-
     fun getCurrentUser() = repository.getCurrentUser()
 
+    
     // STORAGE
     ////////////////////////////////
-    fun uploadProfilePicture(
-        imageUri: Uri,
-        onResult: (Boolean, String?) -> Unit
-    ) {
+    fun uploadProfilePicture(imageUri: Uri, onResult: (Boolean, String?) -> Unit) {
         repository.uploadProfilePicture(imageUri, onResult)
     }
 

@@ -20,4 +20,29 @@ interface ExerciseDao{
 
     @Delete
     suspend fun deleteExercise( exercise: Exercise)
+
+    @Query("""
+    SELECT
+        Exercise.id AS exerciseId,
+        Exercise.name AS name,
+        Exercise.muscleGroup AS muscleGroup,
+        WorkoutExerciseCrossRef.exerciseOrder AS exerciseOrder,
+        WorkoutExerciseCrossRef.sets AS sets,
+        WorkoutExerciseCrossRef.repetitions AS repetitions
+    FROM WorkoutExerciseCrossRef
+    INNER JOIN Exercise
+        ON WorkoutExerciseCrossRef.exerciseId = Exercise.id
+    WHERE WorkoutExerciseCrossRef.workoutId = :workoutId
+    ORDER BY WorkoutExerciseCrossRef.exerciseOrder ASC
+""")
+    suspend fun getExercisesForWorkout(workoutId: Int): List<WorkoutExerciseDetails>
+
+
+
+    @Query("SELECT * FROM Exercise WHERE id = :exerciseId")
+    suspend fun getExerciseById(exerciseId: Int): Exercise?
+
+
+    @Query("DELETE FROM Exercise")
+    suspend fun deleteAllExercises()
 }

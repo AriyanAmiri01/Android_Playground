@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class Workout(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+
     val name : String,
     val duration: Int
 )
@@ -17,5 +18,12 @@ data class Workout(
 )
 data class WorkoutExerciseCrossRef(
     val workoutId: Int,
-    val exerciseId: Int
+    val exerciseId: Int,
+
+    // Position of the exercise in this workout
+    val exerciseOrder : Int,
+
+    // Workout-specific configuration
+    val sets: Int,
+    val repetitions: Int
 )

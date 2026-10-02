@@ -10,41 +10,40 @@
         android:id="@+id/nav_library"
         android:name="com.example.android_playground.workoutLibrary.WorkoutLibraryFragment"
         android:label="Workout Library">
-
         <action
             android:id="@+id/action_workoutLibraryFragment_to_createWorkoutFragment"
             app:destination="@id/createWorkoutFragment" />
 
+        <action
+            android:id ="@+id/action_workoutLibraryFragment_to_workoutDetailsFragment"
+            app:destination="@id/workoutDetailsFragment" />
     </fragment>
-
     <fragment
         android:id="@+id/nav_tracker"
         android:name="com.example.android_playground.Others.WorkoutTrackerFragment"
         android:label="Workout Tracker"
         tools:layout="@layout/fragment_workout_tracker" />
-
     <fragment
         android:id="@+id/nav_plan"
-        android:name="com.example.android_playground.Others.WorkoutPlanFragment"
+        android:name="com.example.android_playground.Others.ExercisesFragment"
         android:label="Workout Plan" />
-
     <fragment
         android:id="@+id/nav_history"
         android:name="com.example.android_playground.Others.ProgressHistoryFragment"
         android:label="Progress History"
         tools:layout="@layout/fragment_progress_history" />
-
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.android_playground.Others.UserProfileFragment"
         android:label="User Profile"
         tools:layout="@layout/fragment_user_profile" />
 
-
+    // Workkouts
     <fragment
         android:id="@+id/createWorkoutFragment"
         android:name="com.example.android_playground.workoutLibrary.CreateWorkoutFragment"
-        android:label="Create Workout" />
+        android:label="Create Workout">
+    </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.android_playground.authenticate.RegisterFragment"
@@ -60,7 +59,6 @@
 
 
     </fragment>
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.android_playground.authenticate.LoginFragment"
@@ -73,6 +71,33 @@
         <action
             android:id="@+id/action_loginFragment_to_nav_library"
             app:destination="@id/nav_library" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/workoutDetailsFragment"
+        android:name="com.example.android_playground.workoutLibrary.WorkoutDetailsFragment"
+        android:label="Workout Details">
+
+        <argument
+            android:name="workoutId"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_workoutDetailsFragment_to_exerciseFragment"
+            app:destination="@id/exerciseFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/exerciseFragment"
+        android:name="com.example.android_playground.exercise.ExerciseFragment"
+        android:label="Exercise">
+
+        <argument
+            android:name="exerciseId"
+            app:argType="integer" />
 
     </fragment>
 </navigation>

@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase
         Exercise::class,
         WorkoutExerciseCrossRef::class],
 
-    version = 2
+    version = 4
 )
 abstract class WorkoutDatabase : RoomDatabase(){
 
@@ -27,7 +27,7 @@ abstract class WorkoutDatabase : RoomDatabase(){
         private var INSTANCE : WorkoutDatabase? = null
 
 
-        // @description it receives teh context and return a WorkoutDatabase instance
+
         fun getDatabase(context: Context) : WorkoutDatabase{
             // Return the instance of the database and if it does not exist create it
             return INSTANCE ?: synchronized(this) {
