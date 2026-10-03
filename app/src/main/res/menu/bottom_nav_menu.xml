@@ -5,7 +5,7 @@
     <!--==[BOTTOM NAVIGATION ITEMS]==-->
     <item
         android:id="@+id/nav_workout"
-        android:icon="@drawable/library_icon"
+        android:icon="@drawable/nav_workout_icon"
         android:title="Workouts" />
     <item
         android:id="@+id/nav_exercises"

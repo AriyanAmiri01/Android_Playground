@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_workout"
+        android:icon="@drawable/nav_workout_icon"
+        android:title="Workouts" />
+
+    <item
+        android:id="@+id/nav_exercises"
+        android:icon="@drawable/plan_icon"
+        android:title="Exercises" />
+
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/tracker_icon"
+        android:title="History" />
+
+    <item
+        android:id="@+id/nav_timer"
+        android:icon="@drawable/history_icon"
+        android:title="Timer" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/profile_icon"
+        android:title="Profile" />
+
+</menu>

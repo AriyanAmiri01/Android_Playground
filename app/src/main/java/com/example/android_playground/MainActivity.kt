@@ -1,15 +1,16 @@
 package com.example.android_playground
 
 import android.os.Bundle                        // Bundle: container for storing key-value data, often used for saving/restoring Activity state
-import android.view.View
 import androidx.activity.enableEdgeToEdge       // Function that allows the Activity UI to draw behind system bars
 import androidx.appcompat.app.AppCompatActivity // Base Activity class that MainActivity inherits from
 import androidx.core.view.ViewCompat            // Utility/helper for working with Android Views with compatibility across Android versions [IDK]
 import androidx.core.view.WindowInsetsCompat    // Represents information about system UI areas, such as status/navigation bars
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView // Material Design bottom navigation UI component
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
+
+import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.appbar.MaterialToolbar
+
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModelFactory
@@ -23,33 +24,60 @@ class MainActivity : AppCompatActivity() {
         // Set the parent state
         super.onCreate(savedInstanceState)
 
-        // Set application boundaries
+        // Set activity content view
         enableEdgeToEdge()
-
-        // User interface connection
         setContentView(R.layout.activity_main)
 
-        // Get BottomNavigationView
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
-        // Add navigation system
+        // Get drawer instances
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+
+        // Get the NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
-        bottomNavigation.setupWithNavController(navController)
 
 
+        // Open drawer when hamburger icon is clicked
+        toolbar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id){
-                R.id.loginFragment, R.id.registerFragment ->{
-                   bottomNavigation.visibility = View.GONE
+        // Handle drawer menu selections
+        navigationView.setNavigationItemSelectedListener { item ->
+
+            when (item.itemId) {
+
+                R.id.nav_workout -> {
+                    navController.navigate(R.id.nav_workout)
                 }
 
-                else ->{
-                    bottomNavigation.visibility = View.VISIBLE
+                R.id.nav_exercises -> {
+                    navController.navigate(R.id.nav_exercises)
+                }
+
+                R.id.nav_history -> {
+                    navController.navigate(R.id.nav_history)
+                }
+
+                R.id.nav_timer -> {
+                    navController.navigate(R.id.nav_timer)
+                }
+
+                R.id.nav_profile -> {
+                    navController.navigate(R.id.nav_profile)
                 }
             }
+
+            // Close drawer after selecting an item
+            drawerLayout.closeDrawer(GravityCompat.START)
+
+            true
         }
+
+
+
 
         // State check
         val repository = AuthRepository()
