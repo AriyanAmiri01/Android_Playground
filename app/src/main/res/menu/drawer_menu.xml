@@ -9,22 +9,22 @@
 
     <item
         android:id="@+id/nav_exercises"
-        android:icon="@drawable/plan_icon"
+        android:icon="@drawable/nav_exercise_icon"
         android:title="Exercises" />
 
     <item
         android:id="@+id/nav_history"
-        android:icon="@drawable/tracker_icon"
+        android:icon="@drawable/nav_history_icon"
         android:title="History" />
 
     <item
         android:id="@+id/nav_timer"
-        android:icon="@drawable/history_icon"
+        android:icon="@drawable/nav_timer_icon"
         android:title="Timer" />
 
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/profile_icon"
+        android:icon="@drawable/nav_profile_icon"
         android:title="Profile" />
 
 </menu>
