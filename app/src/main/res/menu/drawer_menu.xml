@@ -2,29 +2,33 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_workout"
-        android:icon="@drawable/nav_workout_icon"
-        android:title="Workouts" />
+    <group android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/nav_exercises"
-        android:icon="@drawable/nav_exercise_icon"
-        android:title="Exercises" />
+        <item
+            android:id="@+id/nav_workout"
+            android:icon="@drawable/nav_workout_icon"
+            android:title="Workouts" />
 
-    <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/nav_history_icon"
-        android:title="History" />
+        <item
+            android:id="@+id/nav_exercises"
+            android:icon="@drawable/nav_exercise_icon"
+            android:title="Exercises" />
 
-    <item
-        android:id="@+id/nav_timer"
-        android:icon="@drawable/nav_timer_icon"
-        android:title="Timer" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/nav_history_icon"
+            android:title="History" />
 
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/nav_profile_icon"
-        android:title="Profile" />
+        <item
+            android:id="@+id/nav_active_workout"
+            android:icon="@drawable/nav_timer_icon"
+            android:title="Timer" />
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/nav_profile_icon"
+            android:title="Profile" />
+
+    </group>
 
 </menu>

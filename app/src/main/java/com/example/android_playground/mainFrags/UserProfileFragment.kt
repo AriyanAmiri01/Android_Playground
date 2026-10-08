@@ -18,6 +18,9 @@ import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
 
+
+
+
 class UserProfileFragment : Fragment(R.layout.main_frag_user_profile){
 
     // For Firebase connection
@@ -26,20 +29,13 @@ class UserProfileFragment : Fragment(R.layout.main_frag_user_profile){
     private lateinit var profileImage : ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Call the childern proccesses
+        // Call the default constructor stuffs
         super.onViewCreated(view, savedInstanceState)
 
-        // Create the repository
+        // Firebase communication
         val repository = AuthRepository();
-
-        // Create the factory
         val factory = AuthViewModelFactory(repository);
-
-        // Get the viewModel
-        viewModel = ViewModelProvider(
-            this,
-            factory
-        )[AuthViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
 
         // Get Views
         profileImage = view.findViewById(R.id.profileImage)

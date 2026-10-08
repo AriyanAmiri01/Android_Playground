@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.Workout
 
-class WorkoutAdapter(private val workouts: List<Workout>,
+class WorkoutAdapter(
+    private val workouts: List<Workout>,
     private val onDeleteClick: (Workout) -> Unit,
-    private val onWorkoutClick: (Workout) -> Unit
+    private val onWorkoutClick: (Workout) -> Unit,
+    private val onStartClick: (Workout) -> Unit
 ) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>()
 {
     // @ description Prepare the data before passed to the recyclerView
@@ -19,8 +21,8 @@ class WorkoutAdapter(private val workouts: List<Workout>,
         // @ description represent one displayed item
         val workoutName: TextView = itemView.findViewById(R.id.workoutName)
         val workoutDuration: TextView = itemView.findViewById(R.id.workoutDuration)
+        val startButton: Button = itemView.findViewById(R.id.StartWorkoutButton)
         val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
-
     }
 
 
@@ -39,14 +41,12 @@ class WorkoutAdapter(private val workouts: List<Workout>,
 
         // Set the Holder Valeu
         holder.workoutName.text = workout.name
-        holder.workoutDuration.text = workout.duration.toString()
+        holder.workoutDuration.text = "${workout.duration} minutes"
 
         // Add deletion event listener
-        holder.deleteButton.setOnClickListener {
-            onDeleteClick(workout)
-        }
+        holder.startButton.setOnClickListener { onStartClick(workout) }
+        holder.deleteButton.setOnClickListener { onDeleteClick(workout) }
         holder.itemView.setOnClickListener { onWorkoutClick(workout) }
-
     }
 
 

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    style="@style/Style_Card_Workout_Exercise"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    android:layout_marginBottom="12dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -17,39 +19,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-  />
+            android:contentDescription="@null" />
 
-
-        <!-- Text container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="vertical"
             android:padding="16dp"
-            android:background="#99000000">
+            android:background="#CC121212">
 
             <TextView
                 android:id="@+id/exerciseName"
+
+                style="@style/Style_Text_WorkoutExercise_Title"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Exercise name"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="Exercise name" />
 
             <TextView
                 android:id="@+id/exerciseMuscleGroup"
+
+                style="@style/Style_Text_WorkoutExercise_Body"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Muscle group"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:layout_marginTop="4dp"
+                android:text="Muscle group" />
 
         </LinearLayout>
 
-
     </FrameLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

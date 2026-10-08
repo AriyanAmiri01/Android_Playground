@@ -14,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.exercise.WorkoutAdapter
+import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
+import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.WorkoutRepository
+import com.example.android_playground.repository.WorkoutSessionRepository
 import com.example.android_playground.repository.WorkoutViewModel
 import com.example.android_playground.repository.WorkoutViewModelFactory
 import kotlinx.coroutines.launch
@@ -23,13 +26,10 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
 
     // Room + Firestore
     private lateinit var viewModel: WorkoutViewModel
+    private lateinit var activeWorkoutViewModel: ActiveWorkoutViewModel
 
 
-
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Notify the childrens?
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,8 +38,11 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
 
         // ROOM COMMUNICATIONS
         val workoutRepository = WorkoutRepository(database.workoutDao())
+        val sessionRepository = WorkoutSessionRepository(database.workoutSessionDao())
         val workoutFactory = WorkoutViewModelFactory(workoutRepository)
+        val activeWorkoutFactory = ActiveWorkoutViewModelFactory(sessionRepository)
         viewModel = ViewModelProvider(this, workoutFactory)[WorkoutViewModel::class.java]
+        activeWorkoutViewModel = ViewModelProvider(this, activeWorkoutFactory)[ActiveWorkoutViewModel::class.java]
 
         // Create the recyclerView
         val recyclerView = view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
@@ -48,12 +51,8 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
 
         // Observe workouts
         viewLifecycleOwner.lifecycleScope.launch {
-
             viewModel.syncWorkouts()
-
-            viewLifecycleOwner.repeatOnLifecycle(
-                Lifecycle.State.STARTED
-            ) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 viewModel.getAllWorkouts().collect { workouts ->
 
@@ -78,6 +77,24 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
                                 R.id.action_workoutLibraryFragment_to_workoutDetailsFragment,
                                 bundle
                             )
+                        },
+
+                        onStartClick = { workout ->
+
+                            activeWorkoutViewModel.startWorkout(
+                                workout.id
+                            ) { sessionId ->
+
+                                val bundle = Bundle().apply {
+                                    putInt("workoutId", workout.id)
+                                    putInt("sessionId", sessionId)
+                                }
+
+                                findNavController().navigate(
+                                    R.id.action_workoutLibraryFragment_to_activeWorkoutFragment,
+                                    bundle
+                                )
+                            }
                         }
                     )
 
@@ -85,6 +102,8 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
                 }
             }
         }
+
+
 
 
         // Create workout button
@@ -97,6 +116,8 @@ class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
                 R.id.action_workoutLibraryFragment_to_createWorkoutFragment
             )
         }
+
+
     }
 
 

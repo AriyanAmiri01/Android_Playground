@@ -9,9 +9,12 @@ import androidx.room.RoomDatabase
     entities = [
         Workout::class,
         Exercise::class,
-        WorkoutExerciseCrossRef::class],
+        WorkoutExerciseCrossRef::class,
+        WorkoutSession::class,
+        WorkoutSet::class],
 
-    version = 4
+
+    version = 5
 )
 abstract class WorkoutDatabase : RoomDatabase(){
 
@@ -19,6 +22,9 @@ abstract class WorkoutDatabase : RoomDatabase(){
     abstract  fun workoutDao() : WorkoutDao
 
     abstract fun exerciseDao() : ExerciseDao
+
+    // Active/completed workout session operations
+    abstract fun workoutSessionDao(): WorkoutSessionDao
 
     // Companian is a way of creating static members
     companion object{

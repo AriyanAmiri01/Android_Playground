@@ -27,3 +27,45 @@ data class WorkoutExerciseCrossRef(
     val sets: Int,
     val repetitions: Int
 )
+
+
+@Entity
+data class WorkoutSession(
+    @PrimaryKey(autoGenerate = true)
+    val sessionId: Int = 0,
+
+    val workoutId: Int,
+    val startedAt: Long,
+    val completedAt: Long? = null
+)
+
+
+@Entity
+data class WorkoutSet(
+    @PrimaryKey(autoGenerate = true)
+    val setId: Int = 0,
+
+    val sessionId: Int,
+    val exerciseId: Int,
+    val setNumber: Int,
+    val repetitions: Int
+)
+
+
+data class WorkoutSessionDetails(
+    val sessionId: Int,
+    val workoutId: Int,
+    val workoutName: String,
+    val startedAt: Long,
+    val completedAt: Long
+)
+
+
+data class WorkoutSetDetails(
+    val setId: Int,
+    val sessionId: Int,
+    val exerciseId: Int,
+    val exerciseName: String,
+    val setNumber: Int,
+    val repetitions: Int
+)

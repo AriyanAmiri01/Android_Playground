@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@drawable/workout_item_background"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    style = "@style/Style_Card_Workout">
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,24 +18,46 @@
             android:id="@+id/workoutName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Push Workout"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            style="@style/Style_Text_Title"
+            android:text="Default Text" />
 
         <TextView
             android:id="@+id/workoutDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="45 min"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"/>
+            style="@style/Style_Text_Body"
+            android:text="Default Time" />
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delete" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
+            <!-- Start button - LEFT -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/StartWorkoutButton"
+                style="@style/Style_Button_Workout_Start"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:text="Start"
+                android:textSize="10dp"/>
+
+            <!-- Takes all remaining space -->
+            <Space
+                android:layout_width="50dp"
+                android:layout_weight="1"
+                android:layout_height="0dp" />
+
+            <!-- Delete button - RIGHT -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteButton"
+                style="@style/Style_Button_Workout_Delete"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="X" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

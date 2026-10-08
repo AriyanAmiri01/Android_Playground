@@ -1,6 +1,8 @@
 package com.example.android_playground
 
 import android.os.Bundle                        // Bundle: container for storing key-value data, often used for saving/restoring Activity state
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge       // Function that allows the Activity UI to draw behind system bars
 import androidx.appcompat.app.AppCompatActivity // Base Activity class that MainActivity inherits from
 import androidx.core.view.ViewCompat            // Utility/helper for working with Android Views with compatibility across Android versions [IDK]
@@ -12,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.MaterialToolbar
 
 import androidx.navigation.fragment.NavHostFragment
+import com.bumptech.glide.Glide
 import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModelFactory
 
@@ -33,41 +36,42 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val headerView = navigationView.getHeaderView(0)
+        val navProfileImage = headerView.findViewById<ImageView>(R.id.navProfileImage)
+        val navUsername = headerView.findViewById<TextView>(R.id.navUsername)
+        val navEmail = headerView.findViewById<TextView>(R.id.navEmail)
 
-        // Get the NavController
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
-        val navController = navHostFragment.navController
 
-
-        // Open drawer when hamburger icon is clicked
-        toolbar.setNavigationOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
+        // Get current authenticated user
+        val repository = AuthRepository()
+        val user = repository.getCurrentUser()
+        if (user != null) {
+            navUsername.text = user.displayName ?: "User"
+            navEmail.text = user.email ?: ""
+            if (user.photoUrl != null) {
+                Glide.with(this)
+                    .load(user.photoUrl)
+                    .into(navProfileImage)
+            }
         }
 
-        // Handle drawer menu selections
+
+        // Get the NavController and navigate to the correct page
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navController = navHostFragment.navController
+        if (savedInstanceState == null && user != null) { navController.navigate(R.id.nav_workout) }
+
+
+        // Hamburger icon and menu drawer
+        toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         navigationView.setNavigationItemSelectedListener { item ->
-
+            // Navigate
             when (item.itemId) {
-
-                R.id.nav_workout -> {
-                    navController.navigate(R.id.nav_workout)
-                }
-
-                R.id.nav_exercises -> {
-                    navController.navigate(R.id.nav_exercises)
-                }
-
-                R.id.nav_history -> {
-                    navController.navigate(R.id.nav_history)
-                }
-
-                R.id.nav_timer -> {
-                    navController.navigate(R.id.nav_timer)
-                }
-
-                R.id.nav_profile -> {
-                    navController.navigate(R.id.nav_profile)
-                }
+                R.id.nav_workout -> { navController.navigate(R.id.nav_workout) }
+                R.id.nav_exercises -> { navController.navigate(R.id.nav_exercises) }
+                R.id.nav_history -> { navController.navigate(R.id.nav_history) }
+                R.id.nav_active_workout -> { navController.navigate(R.id.nav_active_workout) }
+                R.id.nav_profile -> { navController.navigate(R.id.nav_profile) }
             }
 
             // Close drawer after selecting an item
@@ -76,16 +80,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-
-
-
-        // State check
-        val repository = AuthRepository()
-        if (repository.getCurrentUser() != null) {
-            navController.navigate(R.id.nav_workout)
-        }else{
-            navController.navigate(R.id.loginFragment)
-        }
 
         // Make sure no content goes under hte system bar
         ViewCompat.setOnApplyWindowInsetsListener(
