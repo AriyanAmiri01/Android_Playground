@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.Exercise
 
-class SelectedExerciseAdapter(
+class ExerciseSelectionAdapter(
     private val exercises: List<Exercise>,
-    private val onRemoveClick: (Exercise) -> Unit  // A parameter which is a function that receives a Exercise parameter and returns unit
-) : RecyclerView.Adapter<SelectedExerciseAdapter.ExerciseViewHolder>() {
+    private val onAddClick: (Exercise) -> Unit  // A parameter which is a function that receives a Exercise parameter and returns unit
+) : RecyclerView.Adapter<ExerciseSelectionAdapter.ExerciseViewHolder>() {
 
     // @ description A container for the datas that are being passed to the recyclerView
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,7 +29,7 @@ class SelectedExerciseAdapter(
     ): ExerciseViewHolder {
         // Create a android view from xml object
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_exercise, parent, false)
+            .inflate(R.layout.x02_main_item_exercise, parent, false)
 
         return ExerciseViewHolder(view) }
 
@@ -43,7 +43,7 @@ class SelectedExerciseAdapter(
         holder.exerciseName.text = exercise.name
 
         holder.actionButton.setOnClickListener {
-            onRemoveClick(exercise) } }
+            onAddClick(exercise) } }
 
     override fun getItemCount(): Int {
         return exercises.size

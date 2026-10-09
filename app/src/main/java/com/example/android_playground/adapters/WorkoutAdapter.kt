@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +29,7 @@ class WorkoutAdapter(
     // @ description Responsable for create a single ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_workout, parent, false)
+            .inflate(R.layout.x02_main_item_workout, parent, false)
         return WorkoutViewHolder(view)
     }
 

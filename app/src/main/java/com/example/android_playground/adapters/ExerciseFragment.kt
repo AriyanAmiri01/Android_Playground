@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.net.Uri
 import android.os.Bundle
@@ -17,7 +17,7 @@ import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
 import kotlinx.coroutines.launch
 
-class ExerciseFragment : Fragment(R.layout.sub_frag_exercise) {
+class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
 
     // Room variables
     private lateinit var viewModel: ExerciseViewModel

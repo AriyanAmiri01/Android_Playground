@@ -21,7 +21,7 @@ import com.example.android_playground.repository.AuthViewModelFactory
 
 
 
-class UserProfileFragment : Fragment(R.layout.main_frag_user_profile){
+class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
 
     // For Firebase connection
     private lateinit var viewModel : AuthViewModel

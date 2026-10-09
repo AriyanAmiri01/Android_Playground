@@ -9,93 +9,85 @@
 
 
     <!--==[MAIN FRAGMENTS]==-->
-    <fragment
-        android:id="@+id/nav_workout"
-        android:name="com.example.android_playground.mainFrags.WorkoutFragment"
-        android:label="Workout Library">
-        <action
-            android:id="@+id/action_workoutLibraryFragment_to_createWorkoutFragment"
-            app:destination="@id/createWorkoutFragment" />
-        <action
-            android:id ="@+id/action_workoutLibraryFragment_to_workoutDetailsFragment"
-            app:destination="@id/workoutDetailsFragment" />
-        <action
-            android:id="@+id/action_workoutLibraryFragment_to_activeWorkoutFragment"
-            app:destination="@id/nav_active_workout" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_exercises"
-        android:name="com.example.android_playground.mainFrags.ExercisesFragment"
-        android:label="Exercises"
-        android:layout="@layout/main_frag_exercises" />
-    <fragment
-        android:id="@+id/nav_history"
-        android:name="com.example.android_playground.mainFrags.HistoryFragment"
-        android:label="Workout Tracker"
-        tools:layout="@layout/main_frag_history">
-
-        <action
-            android:id="@+id/action_historyFragment_to_workoutHistoryDetailsFragment"
-            app:destination="@id/workoutHistoryDetailsFragment" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_active_workout"
-        android:name="com.example.android_playground.mainFrags.ActiveWorkoutFragment"
-        android:label="Active Workout"
-        tools:layout="@layout/main_frag_active_workout">
-
-        <argument
-            android:name="workoutId"
-            app:argType="integer"
-            android:defaultValue="-1" />
-
-        <argument
-            android:name="sessionId"
-            app:argType="integer"
-            android:defaultValue="-1" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.example.android_playground.mainFrags.UserProfileFragment"
-        android:label="User Profile"
-        tools:layout="@layout/main_frag_user_profile" />
-
-
+        <fragment
+            android:id="@+id/createWorkoutFragment"
+            android:name="com.example.android_playground.workoutLibrary.CreateWorkoutFragment"
+            android:label="Create Workout">
+        </fragment>
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.example.android_playground.mainFrags.K00_LoginFragment"
+            android:label="LoginFragment">
+            <action
+                android:id="@+id/action_loginFragment_to_registerFragment"
+                app:destination="@id/registerFragment" />
+            <action
+                android:id="@+id/action_loginFragment_to_nav_workout"
+                app:destination="@id/nav_workout" />
+        </fragment>
+        <fragment
+            android:id="@+id/registerFragment"
+            android:name="com.example.android_playground.mainFrags.K01_RegisterFragment"
+            android:label="RegisterFragment">
+            <action
+                android:id="@+id/action_registerFragment_to_loginFragment"
+                app:destination="@id/loginFragment" />
+            <action
+                android:id="@+id/action_registerFragment_to_nav_workout"
+                app:destination="@id/nav_workout" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_workout"
+            android:name="com.example.android_playground.mainFrags.K02_WorkoutFragment"
+            android:label="Workout Library">
+            <action
+                android:id="@+id/action_workoutLibraryFragment_to_createWorkoutFragment"
+                app:destination="@id/createWorkoutFragment" />
+            <action
+                android:id ="@+id/action_workoutLibraryFragment_to_workoutDetailsFragment"
+                app:destination="@id/workoutDetailsFragment" />
+            <action
+                android:id="@+id/action_workoutLibraryFragment_to_activeWorkoutFragment"
+                app:destination="@id/nav_active_workout" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_exercises"
+            android:name="com.example.android_playground.mainFrags.K03_ExercisesFragment"
+            android:label="Exercises"
+            android:layout="@layout/x03_main_frag_exercises" />
+        <fragment
+            android:id="@+id/nav_active_workout"
+            android:name="com.example.android_playground.mainFrags.K04_ActiveWorkoutFragment"
+            android:label="Active Workout"
+            tools:layout="@layout/x04_main_frag_active_workout">
+            <argument
+                android:name="workoutId"
+                app:argType="integer"
+                android:defaultValue="-1" />
+            <argument
+                android:name="sessionId"
+                app:argType="integer"
+                android:defaultValue="-1" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_history"
+            android:name="com.example.android_playground.mainFrags.K05_HistoryFragment"
+            android:label="Workout Tracker"
+            tools:layout="@layout/x05_main_frag_history">
+            <action
+                android:id="@+id/action_historyFragment_to_workoutHistoryDetailsFragment"
+                app:destination="@id/workoutHistoryDetailsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_profile"
+            android:name="com.example.android_playground.mainFrags.K06_UserProfileFragment"
+            android:label="User Profile"
+            tools:layout="@layout/x06_main_frag_user_profile">
+        </fragment>
 
 
 
     <!--==[SUB FRAGMENTS]==-->
-    <fragment
-        android:id="@+id/createWorkoutFragment"
-        android:name="com.example.android_playground.workoutLibrary.CreateWorkoutFragment"
-        android:label="Create Workout">
-    </fragment>
-    <fragment
-        android:id="@+id/registerFragment"
-        android:name="com.example.android_playground.authenticate.RegisterFragment"
-        android:label="RegisterFragment">
-        <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_nav_workout"
-            app:destination="@id/nav_workout" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.android_playground.authenticate.LoginFragment"
-        android:label="LoginFragment">
-        <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_nav_workout"
-            app:destination="@id/nav_workout" />
-    </fragment>
     <fragment
         android:id="@+id/workoutDetailsFragment"
         android:name="com.example.android_playground.workoutLibrary.WorkoutDetailsFragment"
@@ -116,7 +108,7 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseFragment"
-        android:name="com.example.android_playground.exercise.ExerciseFragment"
+        android:name="com.example.android_playground.adapters.ExerciseFragment"
         android:label="Exercise">
 
         <argument
@@ -128,7 +120,7 @@
         android:id="@+id/workoutHistoryDetailsFragment"
         android:name="com.example.android_playground.workoutLibrary.WorkoutHistoryDetailsFragment"
         android:label="Workout History Details"
-        tools:layout="@layout/sub_frag_workout_history_details">
+        tools:layout="@layout/x05_sub_frag_workout_history_details">
 
         <argument
             android:name="sessionId"
@@ -139,6 +131,7 @@
             app:argType="string" />
 
     </fragment>
+
 
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -48,7 +48,7 @@ class WorkoutHistoryAdapter(
         val view = LayoutInflater
             .from(parent.context)
             .inflate(
-                R.layout.item_workout_history,
+                R.layout.x05_main_item_workout_history,
                 parent,
                 false
             )

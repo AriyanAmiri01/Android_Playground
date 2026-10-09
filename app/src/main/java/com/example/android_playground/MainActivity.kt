@@ -16,7 +16,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
 import com.example.android_playground.repository.AuthRepository
-import com.example.android_playground.repository.AuthViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set activity content view
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.x00_main_activity)
 
 
         // Get drawer instances

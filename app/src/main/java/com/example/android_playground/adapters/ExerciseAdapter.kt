@@ -25,7 +25,7 @@ class ExerciseAdapter(private var exercises: List<Exercise>, private val onExerc
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exercise_2, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.x03_main_item_exercise_2, parent, false)
 
         return ExerciseViewHolder(view)
     }

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
-import com.example.android_playground.exercise.ActiveWorkoutAdapter
+import com.example.android_playground.adapters.ActiveWorkoutAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.ExerciseViewModel
@@ -20,8 +20,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
 import com.example.android_playground.repository.WorkoutSessionRepository
 
-class ActiveWorkoutFragment :
-    Fragment(R.layout.main_frag_active_workout) {
+class K04_ActiveWorkoutFragment :
+    Fragment(R.layout.x04_main_frag_active_workout) {
 
     private lateinit var exerciseViewModel: ExerciseViewModel
     private lateinit var activeWorkoutViewModel: ActiveWorkoutViewModel

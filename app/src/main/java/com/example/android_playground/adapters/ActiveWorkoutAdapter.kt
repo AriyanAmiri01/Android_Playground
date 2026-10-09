@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -58,7 +58,7 @@ class ActiveWorkoutAdapter :
         val view = LayoutInflater
             .from(parent.context)
             .inflate(
-                R.layout.item_active_workout_exercise,
+                R.layout.x04_sub_item_active_workout_exercise,
                 parent,
                 false
             )
@@ -95,7 +95,7 @@ class ActiveWorkoutAdapter :
             val setView = LayoutInflater
                 .from(holder.itemView.context)
                 .inflate(
-                    R.layout.item_active_workout_set,
+                    R.layout.x04_main_item_active_workout_set,
                     holder.setsContainer,
                     false
                 )

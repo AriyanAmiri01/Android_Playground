@@ -14,7 +14,7 @@ import com.example.android_playground.repository.ExerciseViewModelFactory
 import androidx.navigation.fragment.findNavController
 
 
-class ExercisesFragment : Fragment(R.layout.main_frag_exercises) {
+class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ExerciseAdapter

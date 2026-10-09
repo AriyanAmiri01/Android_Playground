@@ -1,4 +1,4 @@
-package com.example.android_playground.exercise
+package com.example.android_playground.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +22,7 @@ class WorkoutExerciseAdapter(private val onExerciseClick: (Int) -> Unit) : Recyc
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutExerciseViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_workout_exercise, parent, false)
+            .inflate(R.layout.x02_sub_item_workout_exercise, parent, false)
 
         return WorkoutExerciseViewHolder(view)
     }

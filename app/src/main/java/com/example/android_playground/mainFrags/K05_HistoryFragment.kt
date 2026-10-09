@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutSetDetails
-import com.example.android_playground.exercise.WorkoutHistoryAdapter
+import com.example.android_playground.adapters.WorkoutHistoryAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
 import com.example.android_playground.repository.WorkoutSessionRepository
@@ -23,8 +23,8 @@ data class WorkoutHistoryExercise(
 )
 
 
-class HistoryFragment :
-    Fragment(R.layout.main_frag_history) {
+class K05_HistoryFragment :
+    Fragment(R.layout.x05_main_frag_history) {
 
     private lateinit var viewModel:
             ActiveWorkoutViewModel

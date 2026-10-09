@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.exercise.WorkoutAdapter
+import com.example.android_playground.adapters.WorkoutAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.WorkoutRepository
@@ -22,7 +22,7 @@ import com.example.android_playground.repository.WorkoutViewModel
 import com.example.android_playground.repository.WorkoutViewModelFactory
 import kotlinx.coroutines.launch
 
-class WorkoutFragment : Fragment(R.layout.main_frag_workouts) {
+class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
     // Room + Firestore
     private lateinit var viewModel: WorkoutViewModel

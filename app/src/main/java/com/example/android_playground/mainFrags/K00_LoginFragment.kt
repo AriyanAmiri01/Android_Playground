@@ -1,4 +1,4 @@
-package com.example.android_playground.authenticate
+package com.example.android_playground.mainFrags
 
 import android.os.Bundle
 import android.view.View
@@ -13,16 +13,19 @@ import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
 
-class RegisterFragment : Fragment(R.layout.sub_frag_register){
+class K00_LoginFragment : Fragment(R.layout.x01_main_frag_login) {
+
     private lateinit var viewModel : AuthViewModel
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Calling the child's onViewCreated functions
+        // Call every child's onViewCreated function
         super.onViewCreated(view, savedInstanceState)
 
-        // Add the repository
+        // Add Firebase repository
         val repository = AuthRepository()
 
-        // Add the AuthViewModelFactory
+        // Add AuthViewModelFactory
         val factory = AuthViewModelFactory(repository)
 
         // Create the viewModel
@@ -31,18 +34,20 @@ class RegisterFragment : Fragment(R.layout.sub_frag_register){
             factory
         )[AuthViewModel::class.java]
 
+
         // Get the input fields
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
-        val registerButton = view.findViewById<Button>(R.id.registerButton)
+        val loginButton = view.findViewById<Button>(R.id.loginButton)
 
-        //  Add the register button event listener
-        registerButton.setOnClickListener {
-
+        // Add login button event
+        loginButton.setOnClickListener {
+            // Extract the data
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString()
 
-            if (email.isEmpty() || password.isEmpty()) {
+            // Check for empty inputs
+            if(email.isEmpty() || password.isEmpty()){
                 Toast.makeText(
                     requireContext(),
                     "Please enter email and password",
@@ -51,11 +56,11 @@ class RegisterFragment : Fragment(R.layout.sub_frag_register){
 
                 return@setOnClickListener
             }
-
-            viewModel.registerUser(email, password)
+            // Login the user using the viewModel
+            viewModel.loginUser(email, password)
         }
 
-        // Get debug information from the authResult livedata
+        // Add the observer for the authResult livedata for debugging info
         viewModel.authResult.observe(viewLifecycleOwner) { result ->
 
             val success = result.first
@@ -65,19 +70,23 @@ class RegisterFragment : Fragment(R.layout.sub_frag_register){
 
                 Toast.makeText(
                     requireContext(),
-                    "Account created successfully",
+                    "Login successful :)",
                     Toast.LENGTH_SHORT
                 ).show()
 
                 findNavController().navigate(
-                    R.id.action_registerFragment_to_nav_workout
+                    R.id.action_loginFragment_to_nav_workout
                 )
+
+
+
+                // We will navigate to the main application here later.
 
             } else {
 
                 Toast.makeText(
                     requireContext(),
-                    error ?: "Registration failed",
+                    error ?: "Login failed",
                     Toast.LENGTH_LONG
                 ).show()
             }

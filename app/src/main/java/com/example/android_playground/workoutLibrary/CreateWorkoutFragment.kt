@@ -10,8 +10,8 @@ import com.example.android_playground.R
 import com.example.android_playground.data.Exercise
 import com.example.android_playground.data.Workout
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.exercise.ExerciseSelectionAdapter
-import com.example.android_playground.exercise.SelectedExerciseAdapter
+import com.example.android_playground.adapters.ExerciseSelectionAdapter
+import com.example.android_playground.adapters.SelectedExerciseAdapter
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.WorkoutViewModel
 import com.example.android_playground.repository.WorkoutViewModelFactory
@@ -22,7 +22,7 @@ import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
 
 
-class CreateWorkoutFragment : Fragment(R.layout.sub_frag_create_workout) {
+class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
 
     private val selectedExercises = mutableListOf<Exercise>()

@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
-import com.example.android_playground.exercise.WorkoutExerciseAdapter
+import com.example.android_playground.adapters.WorkoutExerciseAdapter
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
 
-class WorkoutDetailsFragment : Fragment(R.layout.sub_frag_workout_details) {
+class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) {
 
     private lateinit var viewModel: ExerciseViewModel
     private lateinit var adapter: WorkoutExerciseAdapter
