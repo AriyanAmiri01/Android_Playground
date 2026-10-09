@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.Exercise
 
-class SelectedExerciseAdapter(
+class X02_Sub_ExerciseSelectionAdapter(
     private val exercises: List<Exercise>,
-    private val onRemoveClick: (Exercise) -> Unit  // A parameter which is a function that receives a Exercise parameter and returns unit
-) : RecyclerView.Adapter<SelectedExerciseAdapter.ExerciseViewHolder>() {
+    private val onAddClick: (Exercise) -> Unit  // A parameter which is a function that receives a Exercise parameter and returns unit
+) : RecyclerView.Adapter<X02_Sub_ExerciseSelectionAdapter.ExerciseViewHolder>() {
 
     // @ description A container for the datas that are being passed to the recyclerView
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -43,7 +43,7 @@ class SelectedExerciseAdapter(
         holder.exerciseName.text = exercise.name
 
         holder.actionButton.setOnClickListener {
-            onRemoveClick(exercise) } }
+            onAddClick(exercise) } }
 
     override fun getItemCount(): Int {
         return exercises.size

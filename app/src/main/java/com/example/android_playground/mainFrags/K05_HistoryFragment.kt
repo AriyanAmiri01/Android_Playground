@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutSetDetails
-import com.example.android_playground.adapters.WorkoutHistoryAdapter
+import com.example.android_playground.adapters.X05_Main_WorkoutHistoryAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
 import com.example.android_playground.repository.WorkoutSessionRepository
@@ -30,7 +30,7 @@ class K05_HistoryFragment :
             ActiveWorkoutViewModel
 
     private lateinit var adapter:
-            WorkoutHistoryAdapter
+            X05_Main_WorkoutHistoryAdapter
 
 
     override fun onViewCreated(
@@ -45,7 +45,7 @@ class K05_HistoryFragment :
 
         // 1. Create adapter.
         adapter =
-            WorkoutHistoryAdapter { session ->
+            X05_Main_WorkoutHistoryAdapter { session ->
 
                 val bundle =
                     Bundle().apply {

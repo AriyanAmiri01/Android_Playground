@@ -13,8 +13,8 @@ import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutExerciseDetails
 import com.example.android_playground.data.WorkoutSet
 
-class ActiveWorkoutAdapter :
-    RecyclerView.Adapter<ActiveWorkoutAdapter.ActiveWorkoutViewHolder>() {
+class X04_Main_ActiveWorkoutAdapter :
+    RecyclerView.Adapter<X04_Main_ActiveWorkoutAdapter.ActiveWorkoutViewHolder>() {
 
     private var exercises: List<WorkoutExerciseDetails> = emptyList()
 

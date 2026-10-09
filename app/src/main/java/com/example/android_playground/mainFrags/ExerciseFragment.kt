@@ -1,4 +1,4 @@
-package com.example.android_playground.adapters
+package com.example.android_playground.mainFrags
 
 import android.net.Uri
 import android.os.Bundle
@@ -68,11 +68,5 @@ class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
                 Log.e("ExerciseFragment", "Exercise not found: $exerciseId")
             }
         }
-
-
-
-
-
     }
 }
-

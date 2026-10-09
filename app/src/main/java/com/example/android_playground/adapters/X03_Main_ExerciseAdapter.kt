@@ -9,7 +9,7 @@ import com.example.android_playground.R
 import com.example.android_playground.data.Exercise
 import android.widget.ImageView
 
-class ExerciseAdapter(private var exercises: List<Exercise>, private val onExerciseClick: (Int) -> Unit) : RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder>() {
+class X03_Main_ExerciseAdapter(private var exercises: List<Exercise>, private val onExerciseClick: (Int) -> Unit) : RecyclerView.Adapter<X03_Main_ExerciseAdapter.ExerciseViewHolder>() {
 
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

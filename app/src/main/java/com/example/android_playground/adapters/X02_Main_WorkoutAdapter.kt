@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.Workout
 
-class WorkoutAdapter(
+class X02_Main_WorkoutAdapter(
     private val workouts: List<Workout>,
     private val onDeleteClick: (Workout) -> Unit,
     private val onWorkoutClick: (Workout) -> Unit,
     private val onStartClick: (Workout) -> Unit
-) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>()
+) : RecyclerView.Adapter<X02_Main_WorkoutAdapter.WorkoutViewHolder>()
 {
     // @ description Prepare the data before passed to the recyclerView
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

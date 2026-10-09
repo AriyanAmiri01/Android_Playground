@@ -1,4 +1,4 @@
-package com.example.android_playground.workoutLibrary
+package com.example.android_playground.subFrags
 
 import android.os.Bundle
 import android.view.View
@@ -10,8 +10,8 @@ import com.example.android_playground.R
 import com.example.android_playground.data.Exercise
 import com.example.android_playground.data.Workout
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.adapters.ExerciseSelectionAdapter
-import com.example.android_playground.adapters.SelectedExerciseAdapter
+import com.example.android_playground.adapters.X02_Sub_ExerciseSelectionAdapter
+import com.example.android_playground.adapters.X02_Sub_SelectedExerciseAdapter
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.WorkoutViewModel
 import com.example.android_playground.repository.WorkoutViewModelFactory
@@ -24,9 +24,8 @@ import com.example.android_playground.repository.ExerciseViewModelFactory
 
 class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
-
     private val selectedExercises = mutableListOf<Exercise>()
-    private lateinit var selectedAdapter: SelectedExerciseAdapter
+    private lateinit var selectedAdapter: X02_Sub_SelectedExerciseAdapter
     lateinit var exerciseViewModel: ExerciseViewModel;
     private lateinit var workoutViewModel : WorkoutViewModel
 
@@ -37,7 +36,7 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
         // Setup Selected Exercises RecyclerView
         val selectedRecyclerView = view.findViewById<RecyclerView>(R.id.selectedExercisesRecyclerView)
-        selectedAdapter = SelectedExerciseAdapter(exercises = selectedExercises, onRemoveClick = { exercise ->
+        selectedAdapter = X02_Sub_SelectedExerciseAdapter(exercises = selectedExercises, onRemoveClick = { exercise ->
 
             selectedExercises.remove(exercise)
 
@@ -67,7 +66,7 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
         // Load exercises from Room and attach adapter
         exerciseViewModel.getAllExercises { exercises ->
-            val availableAdapter = ExerciseSelectionAdapter(exercises = exercises, onAddClick = { exercise ->
+            val availableAdapter = X02_Sub_ExerciseSelectionAdapter(exercises = exercises, onAddClick = { exercise ->
                     if (!selectedExercises.contains(exercise)) {
                         selectedExercises.add(exercise)
                         selectedAdapter.notifyDataSetChanged()

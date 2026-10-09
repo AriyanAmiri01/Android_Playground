@@ -11,7 +11,7 @@
     <!--==[MAIN FRAGMENTS]==-->
         <fragment
             android:id="@+id/createWorkoutFragment"
-            android:name="com.example.android_playground.workoutLibrary.CreateWorkoutFragment"
+            android:name="com.example.android_playground.subFrags.CreateWorkoutFragment"
             android:label="Create Workout">
         </fragment>
         <fragment
@@ -90,7 +90,7 @@
     <!--==[SUB FRAGMENTS]==-->
     <fragment
         android:id="@+id/workoutDetailsFragment"
-        android:name="com.example.android_playground.workoutLibrary.WorkoutDetailsFragment"
+        android:name="com.example.android_playground.subFrags.WorkoutDetailsFragment"
         android:label="Workout Details">
 
         <argument
@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/workoutHistoryDetailsFragment"
-        android:name="com.example.android_playground.workoutLibrary.WorkoutHistoryDetailsFragment"
+        android:name="com.example.android_playground.subFrags.WorkoutHistoryDetailsFragment"
         android:label="Workout History Details"
         tools:layout="@layout/x05_sub_frag_workout_history_details">
 

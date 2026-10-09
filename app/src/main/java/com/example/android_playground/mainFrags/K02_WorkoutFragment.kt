@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.adapters.WorkoutAdapter
+import com.example.android_playground.adapters.X02_Main_WorkoutAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.WorkoutRepository
@@ -56,7 +56,7 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
                 viewModel.getAllWorkouts().collect { workouts ->
 
-                    val adapter = WorkoutAdapter(
+                    val adapter = X02_Main_WorkoutAdapter(
                         workouts = workouts,
 
                         onDeleteClick = { workout ->

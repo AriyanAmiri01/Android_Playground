@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ExerciseAdapter
+    private lateinit var adapter: X03_Main_ExerciseAdapter
     private lateinit var exerciseViewModel: ExerciseViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
 
         recyclerView = view.findViewById(R.id.exercisesRecyclerView)
 
-        adapter = ExerciseAdapter(emptyList()) { exerciseId ->
+        adapter = X03_Main_ExerciseAdapter(emptyList()) { exerciseId ->
 
             val bundle = Bundle().apply {
                 putInt("exerciseId", exerciseId)

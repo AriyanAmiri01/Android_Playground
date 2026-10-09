@@ -1,34 +1,37 @@
 package com.example.android_playground
 
-import android.os.Bundle                        // Bundle: container for storing key-value data, often used for saving/restoring Activity state
+import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge       // Function that allows the Activity UI to draw behind system bars
-import androidx.appcompat.app.AppCompatActivity // Base Activity class that MainActivity inherits from
-import androidx.core.view.ViewCompat            // Utility/helper for working with Android Views with compatibility across Android versions [IDK]
-import androidx.core.view.WindowInsetsCompat    // Represents information about system UI areas, such as status/navigation bars
-
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.MaterialToolbar
-
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
 import com.example.android_playground.repository.AuthRepository
 
+
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        // @description: set and configure UI connection
 
         // Set the parent state
         super.onCreate(savedInstanceState)
 
-        // Set activity content view
+
+        // Set content view
         enableEdgeToEdge()
         setContentView(R.layout.x00_main_activity)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
 
         // Get drawer instances
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         val navEmail = headerView.findViewById<TextView>(R.id.navEmail)
 
 
-        // Get current authenticated user
+        // Get current user, display username with profile
         val repository = AuthRepository()
         val user = repository.getCurrentUser()
         if (user != null) {
@@ -55,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        // Get the NavController and navigate to the correct page
+        //  Get navigation instances
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
         if (savedInstanceState == null && user != null) { navController.navigate(R.id.nav_workout) }
@@ -79,16 +82,5 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-
-        // Make sure no content goes under hte system bar
-        ViewCompat.setOnApplyWindowInsetsListener(
-            // Get the view
-            findViewById(R.id.main))
-            { v, insets -> // insets is the extra padding to consider to avoid object to go on top of another
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
     }
-
 }

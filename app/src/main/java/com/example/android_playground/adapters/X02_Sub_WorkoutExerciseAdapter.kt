@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutExerciseDetails
 
-class WorkoutExerciseAdapter(private val onExerciseClick: (Int) -> Unit) : RecyclerView.Adapter<WorkoutExerciseAdapter.WorkoutExerciseViewHolder>()
+class X02_Sub_WorkoutExerciseAdapter(private val onExerciseClick: (Int) -> Unit) : RecyclerView.Adapter<X02_Sub_WorkoutExerciseAdapter.WorkoutExerciseViewHolder>()
 {
     // Container and the mothod to fill it
     private var exercises = emptyList<WorkoutExerciseDetails>()

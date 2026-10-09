@@ -11,9 +11,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class WorkoutHistoryAdapter(
+class X05_Main_WorkoutHistoryAdapter(
     private val onSessionClick: (WorkoutSessionDetails) -> Unit
-) : RecyclerView.Adapter<WorkoutHistoryAdapter.WorkoutHistoryViewHolder>() {
+) : RecyclerView.Adapter<X05_Main_WorkoutHistoryAdapter.WorkoutHistoryViewHolder>() {
 
     private var sessions: List<WorkoutSessionDetails> =
         emptyList()

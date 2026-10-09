@@ -1,4 +1,4 @@
-package com.example.android_playground.workoutLibrary
+package com.example.android_playground.subFrags
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
-import com.example.android_playground.adapters.WorkoutExerciseAdapter
+import com.example.android_playground.adapters.X02_Sub_WorkoutExerciseAdapter
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.ExerciseViewModel
 import com.example.android_playground.repository.ExerciseViewModelFactory
@@ -19,7 +19,7 @@ import com.example.android_playground.repository.ExerciseViewModelFactory
 class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) {
 
     private lateinit var viewModel: ExerciseViewModel
-    private lateinit var adapter: WorkoutExerciseAdapter
+    private lateinit var adapter: X02_Sub_WorkoutExerciseAdapter
 
     override fun onViewCreated(
         view: View,
@@ -43,7 +43,7 @@ class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) 
                 bundle
             )
         }
-        adapter = WorkoutExerciseAdapter(::adapterCallback)
+        adapter = X02_Sub_WorkoutExerciseAdapter(::adapterCallback)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.workoutExercisesRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

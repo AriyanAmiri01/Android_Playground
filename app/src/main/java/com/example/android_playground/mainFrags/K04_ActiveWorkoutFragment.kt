@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
-import com.example.android_playground.adapters.ActiveWorkoutAdapter
+import com.example.android_playground.adapters.X04_Main_ActiveWorkoutAdapter
 import com.example.android_playground.repository.ActiveWorkoutViewModel
 import com.example.android_playground.repository.ExerciseRepository
 import com.example.android_playground.repository.ExerciseViewModel
@@ -25,7 +25,7 @@ class K04_ActiveWorkoutFragment :
 
     private lateinit var exerciseViewModel: ExerciseViewModel
     private lateinit var activeWorkoutViewModel: ActiveWorkoutViewModel
-    private lateinit var adapter: ActiveWorkoutAdapter
+    private lateinit var adapter: X04_Main_ActiveWorkoutAdapter
 
     override fun onViewCreated(
         view: View,
@@ -49,7 +49,7 @@ class K04_ActiveWorkoutFragment :
 
 
         // 3. Create the adapter.
-        adapter = ActiveWorkoutAdapter()
+        adapter = X04_Main_ActiveWorkoutAdapter()
 
 
         // 4. Configure the RecyclerView.
