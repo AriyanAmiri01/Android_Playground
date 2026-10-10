@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,7 @@ class K01_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
         val emailEditText = view.findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
         val registerButton = view.findViewById<Button>(R.id.registerButton)
+        val loginTextView = view.findViewById<TextView>(R.id.loginTextView)
 
         //  Add the register button event listener
         registerButton.setOnClickListener {
@@ -54,6 +56,12 @@ class K01_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
 
             viewModel.registerUser(email, password)
         }
+        loginTextView.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_registerFragment_to_loginFragment
+            )
+        }
+
 
         // Get debug information from the authResult livedata
         viewModel.authResult.observe(viewLifecycleOwner) { result ->

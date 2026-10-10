@@ -28,6 +28,13 @@
         android:layout_marginTop="24dp"
         android:text="Login" />
 
+    <Button
+        android:id="@+id/googleSignInButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Continue with Google" />
+
     <TextView
         android:id="@+id/registerTextView"
         android:layout_width="wrap_content"

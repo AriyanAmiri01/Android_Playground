@@ -59,10 +59,23 @@ class MainActivity : AppCompatActivity() {
 
 
         //  Get navigation instances
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
-        val navController = navHostFragment.navController
-        if (savedInstanceState == null && user != null) { navController.navigate(R.id.nav_workout) }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
 
+        val navController = navHostFragment.navController
+
+        if (savedInstanceState == null) {
+
+            val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+
+            if (user != null) {
+                navGraph.setStartDestination(R.id.nav_workout)
+            } else {
+                navGraph.setStartDestination(R.id.loginFragment)
+            }
+
+            navController.graph = navGraph
+        }
 
         // Hamburger icon and menu drawer
         toolbar.setNavigationOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }

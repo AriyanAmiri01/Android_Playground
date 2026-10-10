@@ -32,6 +32,13 @@ class AuthViewModel(
             _authResult.value = Pair(success, error)
         }
     }
+    fun loginWithGoogle(idToken: String) {
+        repository.loginWithGoogle(idToken) { success, error ->
+            _authResult.value = Pair(success, error)
+        }
+    }
+
+
     fun logoutUser(){
         repository.logoutUser()
     }

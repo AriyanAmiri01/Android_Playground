@@ -6,6 +6,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.auth.GoogleAuthProvider
+
+
 
 class AuthRepository {
     /// FIREBASE INSTANCES
@@ -104,6 +107,28 @@ class AuthRepository {
         return storageReference.downloadUrl.await().toString()
     }
 
+    fun loginWithGoogle(
+        idToken: String,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        // Convert the Google ID token into a Firebase credential
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+
+        // Authenticate the Google account with Firebase
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    onResult(true, null)
+                } else {
+                    onResult(false, task.exception?.message)
+                }
+            }
+    }
+
+
+
+    // GOOGLE STUFFS
 
 
 }
