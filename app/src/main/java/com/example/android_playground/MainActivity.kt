@@ -1,5 +1,6 @@
 package com.example.android_playground
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,6 +18,10 @@ import com.example.android_playground.repository.AuthRepository
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var navProfileImage: ImageView
+    private lateinit var navUsername: TextView
+    private lateinit var navEmail: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -39,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val headerView = navigationView.getHeaderView(0)
-        val navProfileImage = headerView.findViewById<ImageView>(R.id.navProfileImage)
-        val navUsername = headerView.findViewById<TextView>(R.id.navUsername)
-        val navEmail = headerView.findViewById<TextView>(R.id.navEmail)
+        navProfileImage = headerView.findViewById<ImageView>(R.id.navProfileImage)
+        navUsername = headerView.findViewById<TextView>(R.id.navUsername)
+        navEmail = headerView.findViewById<TextView>(R.id.navEmail)
 
 
         // Get current user, display username with profile
@@ -95,5 +100,13 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+    }
+
+    // Update only the drawer profile image
+    fun updateDrawerProfileImage(uri: Uri) {
+
+        Glide.with(this)
+            .load(uri)
+            .into(navProfileImage)
     }
 }

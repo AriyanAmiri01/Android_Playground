@@ -1,13 +1,12 @@
 package com.example.android_playground.mainFrags
 
-import android.net.Uri
+
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
@@ -17,7 +16,11 @@ import com.example.android_playground.R
 import com.example.android_playground.repository.AuthRepository
 import com.example.android_playground.repository.AuthViewModel
 import com.example.android_playground.repository.AuthViewModelFactory
-
+import android.app.Activity
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.android_playground.MainActivity
+import com.yalantis.ucrop.UCrop
 
 
 
@@ -28,6 +31,25 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
 
     private lateinit var profileImage : ImageView
 
+    private val cropImageLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val data = result.data
+
+                if (data != null) {
+                    val resultUri: Uri? = UCrop.getOutput(data)
+
+                    if (resultUri != null) {
+                        uploadProfileImage(resultUri)
+                    }
+                }
+            }
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Call the default constructor stuffs
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +58,7 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
         val repository = AuthRepository();
         val factory = AuthViewModelFactory(repository);
         viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
+
 
         // Get Views
         profileImage = view.findViewById(R.id.profileImage)
@@ -128,20 +151,61 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
 
     // PICTURE PICKER
     private val profilePicturePicker =
-        registerForActivityResult(  // Launch another activity and later give me its result
-            ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->   // Let the user select the media
+        registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri: Uri? ->
+
             if (uri != null) {
-
-                viewModel.uploadProfilePicture(uri) { success, error ->
-
-                    if (success) {
-                        // Show the selected image immediately
-                        profileImage.setImageURI(uri)
-                    } else {
-                        // Upload failed
-                        // We will handle the error properly later
-                    }
-                }
+                startImageCrop(uri)
             }
         }
+    private fun startImageCrop(sourceUri: Uri) {
+
+        val destinationUri = Uri.fromFile(
+            java.io.File(
+                requireContext().cacheDir,
+                "cropped_profile_${System.currentTimeMillis()}.jpg"
+            )
+        )
+
+        val options = com.yalantis.ucrop.UCrop.Options().apply {
+            setCompressionFormat(android.graphics.Bitmap.CompressFormat.JPEG)
+            setCompressionQuality(90)
+        }
+
+        val cropIntent = com.yalantis.ucrop.UCrop
+            .of(sourceUri, destinationUri)
+
+            // Square profile picture
+            .withAspectRatio(1f, 1f)
+
+            // Resize output
+            .withMaxResultSize(512, 512)
+
+            .withOptions(options)
+            .getIntent(requireContext())
+
+        cropImageLauncher.launch(cropIntent)
+    }
+
+    private fun uploadProfileImage(uri: Uri) {
+
+        viewModel.uploadProfilePicture(uri) { success, error ->
+
+            if (success) {
+
+                // Update image in profile Fragment
+                Glide.with(this)
+                    .load(uri)
+                    .into(profileImage)
+
+                // Update image in navigation drawer
+                (requireActivity() as MainActivity)
+                    .updateDrawerProfileImage(uri)
+
+            } else {
+                // Handle upload error later
+            }
+        }
+    }
 }
