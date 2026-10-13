@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.adapters.WorkoutHistoryDetailsAdapter
-import com.example.android_playground.repository.ActiveWorkoutViewModel
-import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
-import com.example.android_playground.repository.WorkoutSessionRepository
+import com.example.android_playground.repository.WorkoutSession_ViewModel
+import com.example.android_playground.repository.WorkoutSession_ViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_Repository
 
 class WorkoutHistoryDetailsFragment :
     Fragment(R.layout.x05_sub_frag_workout_history_details) {
 
     private lateinit var viewModel:
-            ActiveWorkoutViewModel
+            WorkoutSession_ViewModel
 
     private lateinit var adapter:
             WorkoutHistoryDetailsAdapter
@@ -82,14 +82,14 @@ class WorkoutHistoryDetailsFragment :
 
         // 6. Repository.
         val repository =
-            WorkoutSessionRepository(
+            WorkoutSession_Repository(
                 database.workoutSessionDao()
             )
 
 
         // 7. ViewModel.
         val factory =
-            ActiveWorkoutViewModelFactory(
+            WorkoutSession_ViewModelFactory(
                 repository
             )
 
@@ -97,13 +97,11 @@ class WorkoutHistoryDetailsFragment :
             ViewModelProvider(
                 this,
                 factory
-            )[ActiveWorkoutViewModel::class.java]
+            )[WorkoutSession_ViewModel::class.java]
 
 
         // 8. Load performed sets.
-        viewModel.getWorkoutSetDetails(
-            sessionId
-        ) { sets ->
+        viewModel.Read_WorkoutSet_WorkoutSetDetails(sessionId) { sets ->
 
             adapter.submitList(
                 sets

@@ -10,21 +10,21 @@ import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
 import com.example.android_playground.adapters.X04_Main_ActiveWorkoutAdapter
-import com.example.android_playground.repository.ActiveWorkoutViewModel
-import com.example.android_playground.repository.ExerciseRepository
-import com.example.android_playground.repository.ExerciseViewModel
-import com.example.android_playground.repository.ExerciseViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_ViewModel
+import com.example.android_playground.repository.Exercise_Repository
+import com.example.android_playground.repository.Exercise_ViewModel
+import com.example.android_playground.repository.Exercise_ViewModelFactory
 
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
-import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
-import com.example.android_playground.repository.WorkoutSessionRepository
+import com.example.android_playground.repository.WorkoutSession_ViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_Repository
 
 class K04_ActiveWorkoutFragment :
     Fragment(R.layout.x04_main_frag_active_workout) {
 
-    private lateinit var exerciseViewModel: ExerciseViewModel
-    private lateinit var activeWorkoutViewModel: ActiveWorkoutViewModel
+    private lateinit var exerciseViewModel: Exercise_ViewModel
+    private lateinit var activeWorkoutViewModel: WorkoutSession_ViewModel
     private lateinit var adapter: X04_Main_ActiveWorkoutAdapter
 
     override fun onViewCreated(
@@ -69,12 +69,12 @@ class K04_ActiveWorkoutFragment :
             WorkoutDatabase.getDatabase(requireContext())
 
         val sessionRepository =
-            WorkoutSessionRepository(
+            WorkoutSession_Repository(
                 database.workoutSessionDao()
             )
 
         val activeWorkoutFactory =
-            ActiveWorkoutViewModelFactory(
+            WorkoutSession_ViewModelFactory(
                 sessionRepository
             )
 
@@ -82,23 +82,23 @@ class K04_ActiveWorkoutFragment :
             ViewModelProvider(
                 this,
                 activeWorkoutFactory
-            )[ActiveWorkoutViewModel::class.java]
+            )[WorkoutSession_ViewModel::class.java]
 
         // 6. Create the Exercise repository.
         val exerciseRepository =
-            ExerciseRepository(
+            Exercise_Repository(
                 database.exerciseDao()
             )
 
 
         // 7. Create the Exercise ViewModel.
         val exerciseFactory =
-            ExerciseViewModelFactory(exerciseRepository)
+            Exercise_ViewModelFactory(exerciseRepository)
 
         exerciseViewModel = ViewModelProvider(
             this,
             exerciseFactory
-        )[ExerciseViewModel::class.java]
+        )[Exercise_ViewModel::class.java]
 
 
         // 8. Receive the exercises from Room.
@@ -110,10 +110,7 @@ class K04_ActiveWorkoutFragment :
 
 
         // 9. Load the exercises belonging to this workout.
-        exerciseViewModel.loadExercisesForWorkout(
-            workoutId,
-            ::onExercisesLoaded
-        )
+        exerciseViewModel.Read_ExercisesForWorkout(workoutId, ::onExercisesLoaded)
 
 
 
@@ -124,18 +121,11 @@ class K04_ActiveWorkoutFragment :
         finishWorkoutButton.setOnClickListener {
 
             // Get all entered sets from the adapter.
-            val workoutSets =
-                adapter.getWorkoutSets(
-                    sessionId
-                )
+            val workoutSets = adapter.getWorkoutSets(sessionId)
 
 
             // Save the sets and mark the session completed.
-            activeWorkoutViewModel.completeWorkout(
-                sessionId = sessionId,
-                workoutSets = workoutSets
-            ) {
-
+            activeWorkoutViewModel.Update_WorkoutSession_FinishAndAddSets(sessionId = sessionId, workoutSets = workoutSets) {
                 // Return to the previous screen.
                 findNavController().popBackStack()
             }

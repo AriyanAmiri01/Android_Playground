@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.MaterialToolbar
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
-import com.example.android_playground.repository.AuthRepository
+import com.example.android_playground.repository.Auth_Repository
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // Get current user, display username with profile
-        val repository = AuthRepository()
+        val repository = Auth_Repository()
         val user = repository.getCurrentUser()
         if (user != null) {
             navUsername.text = user.displayName ?: "User"

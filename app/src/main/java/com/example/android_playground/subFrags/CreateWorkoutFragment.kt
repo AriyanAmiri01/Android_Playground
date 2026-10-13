@@ -12,22 +12,22 @@ import com.example.android_playground.data.Workout
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.adapters.X02_Sub_ExerciseSelectionAdapter
 import com.example.android_playground.adapters.X02_Sub_SelectedExerciseAdapter
-import com.example.android_playground.repository.ExerciseRepository
-import com.example.android_playground.repository.WorkoutViewModel
-import com.example.android_playground.repository.WorkoutViewModelFactory
-import com.example.android_playground.repository.WorkoutRepository
+import com.example.android_playground.repository.Exercise_Repository
+import com.example.android_playground.repository.Workout_ViewModel
+import com.example.android_playground.repository.Workout_ViewModelFactory
+import com.example.android_playground.repository.Workout_Repository
 import android.widget.Button
 import android.widget.EditText
-import com.example.android_playground.repository.ExerciseViewModel
-import com.example.android_playground.repository.ExerciseViewModelFactory
+import com.example.android_playground.repository.Exercise_ViewModel
+import com.example.android_playground.repository.Exercise_ViewModelFactory
 
 
 class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
     private val selectedExercises = mutableListOf<Exercise>()
     private lateinit var selectedAdapter: X02_Sub_SelectedExerciseAdapter
-    lateinit var exerciseViewModel: ExerciseViewModel;
-    private lateinit var workoutViewModel : WorkoutViewModel
+    lateinit var exerciseViewModel: Exercise_ViewModel;
+    private lateinit var workoutViewModel : Workout_ViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Notify all childrens
@@ -53,19 +53,19 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
         // Instantiate database and repositories
         val database = WorkoutDatabase.getDatabase(requireContext())
-        val exerciseRepository = ExerciseRepository(database.exerciseDao())
-        val workoutRepository = WorkoutRepository(database.workoutDao())
+        val exerciseRepository = Exercise_Repository(database.exerciseDao())
+        val workoutRepository = Workout_Repository(database.workoutDao())
 
 
         // Instantiate viewModels
-        val exerciseViewModelFactory = ExerciseViewModelFactory(exerciseRepository)
-        val workoutLibraryViewModelFactory = WorkoutViewModelFactory(workoutRepository)
-        exerciseViewModel = ViewModelProvider(this, exerciseViewModelFactory)[ExerciseViewModel::class.java]
-        workoutViewModel = ViewModelProvider(this, workoutLibraryViewModelFactory)[WorkoutViewModel::class.java]
+        val exerciseViewModelFactory = Exercise_ViewModelFactory(exerciseRepository)
+        val workoutLibraryViewModelFactory = Workout_ViewModelFactory(workoutRepository)
+        exerciseViewModel = ViewModelProvider(this, exerciseViewModelFactory)[Exercise_ViewModel::class.java]
+        workoutViewModel = ViewModelProvider(this, workoutLibraryViewModelFactory)[Workout_ViewModel::class.java]
 
 
         // Load exercises from Room and attach adapter
-        exerciseViewModel.getAllExercises { exercises ->
+        exerciseViewModel.Read_AllExercises { exercises ->
             val availableAdapter = X02_Sub_ExerciseSelectionAdapter(exercises = exercises, onAddClick = { exercise ->
                     if (!selectedExercises.contains(exercise)) {
                         selectedExercises.add(exercise)
@@ -109,7 +109,7 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
             }
 
             // Let the viewmodel handle the rest while adding a callback function for reverse navigation
-            workoutViewModel.createWorkout(workout = workout, exerciseIds = exerciseIds, onComplete = {
+            workoutViewModel.Create_Workout(workout = workout, exerciseIds = exerciseIds, onComplete = {
                     parentFragmentManager.popBackStack()
                 })
         }

@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android_playground.R
-import com.example.android_playground.repository.AuthRepository
-import com.example.android_playground.repository.AuthViewModel
-import com.example.android_playground.repository.AuthViewModelFactory
+import com.example.android_playground.repository.Auth_Repository
+import com.example.android_playground.repository.Auth_ViewModel
+import com.example.android_playground.repository.Auth_ViewModelFactory
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -25,7 +25,8 @@ import kotlinx.coroutines.launch
 
 class K00_LoginFragment : Fragment(R.layout.x01_main_frag_login) {
 
-    private lateinit var viewModel : AuthViewModel
+    // Varriables
+    private lateinit var viewModel : Auth_ViewModel
     private lateinit var credentialManager: CredentialManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,10 +34,9 @@ class K00_LoginFragment : Fragment(R.layout.x01_main_frag_login) {
         super.onViewCreated(view, savedInstanceState)
 
         // Add Firebase repository
-        val repository = AuthRepository()
-        val factory = AuthViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
-
+        val repository = Auth_Repository()
+        val factory = Auth_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[Auth_ViewModel::class.java]
 
         // Google
         credentialManager = CredentialManager.create(requireContext())

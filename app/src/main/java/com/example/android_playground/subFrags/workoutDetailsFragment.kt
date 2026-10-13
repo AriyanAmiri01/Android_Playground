@@ -12,19 +12,16 @@ import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutExerciseDetails
 import com.example.android_playground.adapters.X02_Sub_WorkoutExerciseAdapter
-import com.example.android_playground.repository.ExerciseRepository
-import com.example.android_playground.repository.ExerciseViewModel
-import com.example.android_playground.repository.ExerciseViewModelFactory
+import com.example.android_playground.repository.Exercise_Repository
+import com.example.android_playground.repository.Exercise_ViewModel
+import com.example.android_playground.repository.Exercise_ViewModelFactory
 
 class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) {
 
-    private lateinit var viewModel: ExerciseViewModel
+    private lateinit var viewModel: Exercise_ViewModel
     private lateinit var adapter: X02_Sub_WorkoutExerciseAdapter
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // 0. Call the Fragment's implementation
         super.onViewCreated(view, savedInstanceState)
 
@@ -34,14 +31,9 @@ class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) 
 
         // 2. Get adapter and recycler view ready
         fun adapterCallback(exerciseId : Int){
-            val bundle = Bundle().apply {
-                putInt("exerciseId", exerciseId)
-            }
+            val bundle = Bundle().apply { putInt("exerciseId", exerciseId) }
 
-            findNavController().navigate(
-                R.id.action_workoutDetailsFragment_to_exerciseFragment,
-                bundle
-            )
+            findNavController().navigate(R.id.action_workoutDetailsFragment_to_exerciseFragment, bundle)
         }
         adapter = X02_Sub_WorkoutExerciseAdapter(::adapterCallback)
 
@@ -54,14 +46,14 @@ class WorkoutDetailsFragment : Fragment(R.layout.x02_sub_recyc_workout_details) 
         // 3. Room communications
         val databaseRef = WorkoutDatabase.getDatabase(requireContext())
         val exerciseDao = databaseRef.exerciseDao()
-        val repository = ExerciseRepository(exerciseDao = exerciseDao)
-        val factory = ExerciseViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[ExerciseViewModel::class.java]
+        val repository = Exercise_Repository(exerciseDao = exerciseDao)
+        val factory = Exercise_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[Exercise_ViewModel::class.java]
 
 
         // 4. Load into the adapter
         fun onExercisesLoaded(exercises: List<WorkoutExerciseDetails>) { adapter.submitList(exercises) }
-        viewModel.loadExercisesForWorkout(workoutId, ::onExercisesLoaded)
+        viewModel.Read_ExercisesForWorkout(workoutId, ::onExercisesLoaded)
 
     }
 }

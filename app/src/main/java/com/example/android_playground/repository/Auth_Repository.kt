@@ -7,25 +7,69 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.example.android_playground.data.UserProfile
 
 
-
-class AuthRepository {
+class Auth_Repository {
     /// FIREBASE INSTANCES
     /////////////////////////////
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseStorage = FirebaseStorage.getInstance()
-
+    private val firestore = FirebaseFirestore.getInstance()
 
     /// AUTHENTICATION
     /////////////////////////////
-    fun registerUser(email : String, password : String, onResult : (Boolean, String?) -> Unit){
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+    fun registerUser(firstName: String, lastName: String, username: String, email: String, password: String, onResult: (Boolean, String?) -> Unit) {
+
+        firebaseAuth
+            .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if( task.isSuccessful){
-                    onResult(true, null)
-                }else{
-                    onResult(false,task.exception?.message)
+
+                if (task.isSuccessful) {
+
+                    // Get the newly created Firebase user
+                    val user = firebaseAuth.currentUser
+
+                    if (user == null) {
+                        onResult(false, "Could not retrieve created user")
+                        return@addOnCompleteListener
+                    }
+
+
+                    // Create our Firestore user profile
+                    val userProfile = UserProfile(
+                        uid = user.uid,
+                        firstName = firstName,
+                        lastName = lastName,
+                        username = username,
+                        email = email
+                    )
+
+
+                    // Store the profile using the Firebase UID
+                    firestore
+                        .collection("users")
+                        .document(user.uid)
+                        .set(userProfile)
+                        .addOnSuccessListener {
+
+                            onResult(true, null)
+                        }
+                        .addOnFailureListener { exception ->
+
+                            onResult(
+                                false,
+                                exception.message
+                            )
+                        }
+
+                } else {
+
+                    onResult(
+                        false,
+                        task.exception?.message
+                    )
                 }
             }
     }
@@ -47,7 +91,42 @@ class AuthRepository {
     fun getCurrentUser() : FirebaseUser?{
         return firebaseAuth.currentUser
     }
+    // FIRESTORE
+////////////////////////////////
+    fun getUserProfile(
+        onResult: (UserProfile?, String?) -> Unit
+    ) {
 
+        val user = firebaseAuth.currentUser
+
+        if (user == null) {
+            onResult(null, "No user is currently logged in")
+            return
+        }
+
+        firestore
+            .collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { document ->
+
+                if (document.exists()) {
+
+                    val userProfile =
+                        document.toObject(UserProfile::class.java)
+
+                    onResult(userProfile, null)
+
+                } else {
+
+                    onResult(null, "User profile not found")
+                }
+            }
+            .addOnFailureListener { exception ->
+
+                onResult(null, exception.message)
+            }
+    }
 
     /// STORAGE
     ////////////////////////////////

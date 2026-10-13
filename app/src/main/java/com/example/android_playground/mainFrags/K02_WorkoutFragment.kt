@@ -14,19 +14,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.adapters.X02_Main_WorkoutAdapter
-import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
-import com.example.android_playground.repository.ActiveWorkoutViewModel
-import com.example.android_playground.repository.WorkoutRepository
-import com.example.android_playground.repository.WorkoutSessionRepository
-import com.example.android_playground.repository.WorkoutViewModel
-import com.example.android_playground.repository.WorkoutViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_ViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_ViewModel
+import com.example.android_playground.repository.Workout_Repository
+import com.example.android_playground.repository.WorkoutSession_Repository
+import com.example.android_playground.repository.Workout_ViewModel
+import com.example.android_playground.repository.Workout_ViewModelFactory
 import kotlinx.coroutines.launch
 
 class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
     // Room + Firestore
-    private lateinit var viewModel: WorkoutViewModel
-    private lateinit var activeWorkoutViewModel: ActiveWorkoutViewModel
+    private lateinit var viewModel: Workout_ViewModel
+    private lateinit var activeWorkoutViewModel: WorkoutSession_ViewModel
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,12 +37,12 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
         val database = WorkoutDatabase.getDatabase(requireContext())
 
         // ROOM COMMUNICATIONS
-        val workoutRepository = WorkoutRepository(database.workoutDao())
-        val sessionRepository = WorkoutSessionRepository(database.workoutSessionDao())
-        val workoutFactory = WorkoutViewModelFactory(workoutRepository)
-        val activeWorkoutFactory = ActiveWorkoutViewModelFactory(sessionRepository)
-        viewModel = ViewModelProvider(this, workoutFactory)[WorkoutViewModel::class.java]
-        activeWorkoutViewModel = ViewModelProvider(this, activeWorkoutFactory)[ActiveWorkoutViewModel::class.java]
+        val workoutRepository = Workout_Repository(database.workoutDao())
+        val sessionRepository = WorkoutSession_Repository(database.workoutSessionDao())
+        val workoutFactory = Workout_ViewModelFactory(workoutRepository)
+        val activeWorkoutFactory = WorkoutSession_ViewModelFactory(sessionRepository)
+        viewModel = ViewModelProvider(this, workoutFactory)[Workout_ViewModel::class.java]
+        activeWorkoutViewModel = ViewModelProvider(this, activeWorkoutFactory)[WorkoutSession_ViewModel::class.java]
 
         // Create the recyclerView
         val recyclerView = view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
@@ -51,16 +51,16 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
         // Observe workouts
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.syncWorkouts()
+            viewModel.Sync_Workouts()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                viewModel.getAllWorkouts().collect { workouts ->
+                viewModel.Read_AllWorkouts().collect { workouts ->
 
                     val adapter = X02_Main_WorkoutAdapter(
                         workouts = workouts,
 
                         onDeleteClick = { workout ->
-                            viewModel.deleteWorkout(workout) {
+                            viewModel.Delete_Workout(workout) {
                             }
                         },
 
@@ -81,9 +81,7 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
                         onStartClick = { workout ->
 
-                            activeWorkoutViewModel.startWorkout(
-                                workout.id
-                            ) { sessionId ->
+                            activeWorkoutViewModel.Create_WorkoutSession(workout.id) { sessionId ->
 
                                 val bundle = Bundle().apply {
                                     putInt("workoutId", workout.id)

@@ -8,23 +8,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.repository.ExerciseRepository
-import com.example.android_playground.repository.ExerciseViewModel
-import com.example.android_playground.repository.ExerciseViewModelFactory
+import com.example.android_playground.repository.Exercise_Repository
+import com.example.android_playground.repository.Exercise_ViewModel
+import com.example.android_playground.repository.Exercise_ViewModelFactory
 import androidx.navigation.fragment.findNavController
 
 
 class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
 
+    // Variables
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: X03_Main_ExerciseAdapter
-    private lateinit var exerciseViewModel: ExerciseViewModel
+    private lateinit var exerciseViewModel: Exercise_ViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Default onViewCreated Constructor stuffs
         super.onViewCreated(view, savedInstanceState)
 
+        // Recycler view stuffs
         recyclerView = view.findViewById(R.id.exercisesRecyclerView)
-
         adapter = X03_Main_ExerciseAdapter(emptyList()) { exerciseId ->
 
             val bundle = Bundle().apply {
@@ -36,20 +38,16 @@ class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
                 bundle
             )
         }
-
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
+        // Database stuffs
         val database = WorkoutDatabase.getDatabase(requireContext())
-        val repository = ExerciseRepository(database.exerciseDao())
+        val repository = Exercise_Repository(database.exerciseDao())
+        exerciseViewModel = ViewModelProvider(this, Exercise_ViewModelFactory(repository))[Exercise_ViewModel::class.java]
 
-        exerciseViewModel = ViewModelProvider(
-            this,
-            ExerciseViewModelFactory(repository)
-        )[ExerciseViewModel::class.java]
-
-        exerciseViewModel.getAllExercises { exercises ->
-
+        // Fill the adapter
+        exerciseViewModel.Read_AllExercises { exercises ->
             adapter.updateExercises(exercises)
         }
     }

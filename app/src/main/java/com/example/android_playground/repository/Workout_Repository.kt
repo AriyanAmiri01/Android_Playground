@@ -9,22 +9,23 @@ import com.example.android_playground.data.WorkoutDao
 import com.example.android_playground.data.FirestoreWorkout
 import com.example.android_playground.data.FirestoreWorkoutExercise
 import com.example.android_playground.data.WorkoutExerciseCrossRef
-import com.example.android_playground.data.WorkoutExerciseDetails
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
-import kotlin.text.get
 import kotlinx.coroutines.flow.first
 
-class WorkoutRepository(
+class Workout_Repository(
     private val workoutDao: WorkoutDao
 ) {
-    // ROOM + FIRESTORE
+
+    /// ROOM + FIRESTORE
+    //////////////////////////////////////////
+
     suspend fun CREATE_Workout(workout: Workout, exerciseIds: List<Int>): Int{
 
         // Insert and get ID
-        val generatedId = roomCreateWorkout(workout, exerciseIds).toInt()
+        val generatedId = Room_Create_WorkoutWithCrossRef(workout, exerciseIds).toInt()
         val workoutWithId = workout.copy(id = generatedId)
 
         // Firestore, create and insert
@@ -46,12 +47,12 @@ class WorkoutRepository(
         return generatedId
     }
     fun READ_Workouts() : Flow<List<Workout>>{
-        return roomReadWorkouts()
+        return Room_Read_Workouts()
     }
     suspend fun UPDATE_Workout(workoutId: String, workout:Workout){
 
         // 1. Update Room
-        roomUpdateWorkout(workoutId.toInt(), workout)
+        Room_Update_Workout(workoutId.toInt(), workout)
 
         // 2. Update firestore
         val firestoreWorkout = FirestoreWorkout(id = workoutId, name = workout.name, duration = workout.duration)
@@ -60,7 +61,7 @@ class WorkoutRepository(
     }
     suspend fun DELETE_Workout(workoutId: String){
         // 1. Delete workout
-        roomDeleteWorkoutById(workoutId.toInt())
+        Room_Delete_Workout(workoutId.toInt())
 
         // 2.Delete workout-exercise
         firestoreDeleteWorkoutById(workoutId)
@@ -74,58 +75,53 @@ class WorkoutRepository(
 
 
         // 2. Synchronize Room with Firebase
-        roomSyncWorkouts(firestoreWorkouts)
-        roomSyncWorkoutExercises(firestoreWorkoutExercises)
+        Room_Sync_Workouts(firestoreWorkouts)
+        Room_Sync_WorkoutExercises(firestoreWorkoutExercises)
     }
-
-
 
     /// ROOM
     //////////////////////////////////////////
 
-    suspend fun roomInsertWorkout(workout: Workout) : Long{
-       return workoutDao.insertWorkout(workout) }
-    suspend fun roomCreateWorkout(workout: Workout, exerciseIds: List<Int>): Long {
-        return workoutDao.createWorkoutWithExercises(workout, exerciseIds) }
-    fun roomReadWorkouts(): Flow<List<Workout>> {
-        return workoutDao.getAllWorkouts() }
-    suspend fun roomUpdateWorkout(workoutId: Int, workout: Workout){
-        workoutDao.updateWorkout(workout);
+    suspend fun Room_Create_Workout(workout: Workout) : Long{
+       return workoutDao.Create_Workout(workout)
     }
-    suspend fun roomDeleteWorkoutById(workoutId : Int){
-        workoutDao.deleteWorkoutExerciseCrossRefs(workoutId)
-        workoutDao.deleteWorkoutById(workoutId)
+    fun Room_Read_Workouts(): Flow<List<Workout>> {
+        return workoutDao.Read_Workouts()
     }
-    suspend fun roomSyncWorkouts(firestoreWorkouts: List<FirestoreWorkout>) {
+    suspend fun Room_Update_Workout(workoutId: Int, workout: Workout){
+        workoutDao.Update_Workout(workout);
+    }
+    suspend fun Room_Delete_Workout(workoutId : Int){
+        workoutDao.Delete_WorkoutExercise_CrossRefs(workoutId)
+        workoutDao.Delete_Workout(workoutId)
+    }
+    suspend fun Room_Sync_Workouts(firestoreWorkouts: List<FirestoreWorkout>) {
         // Get existing IDs in the firestore
         val firestoreIds = firestoreWorkouts
             .map{it.id.toInt()}
             .toSet()
 
         // Get current room workouts
-        val roomWorkouts = roomReadWorkouts().first()
+        val roomWorkouts = Room_Read_Workouts().first()
 
         // Delete room workouts that don't exist anymore
         roomWorkouts.forEach{ roomWorkout ->
             if(roomWorkout.id !in firestoreIds){
-                roomDeleteWorkoutById(roomWorkout.id)
+                Room_Delete_Workout(roomWorkout.id)
             }
         }
 
         // Insert workouts that are in firebase but not in room
-        // Insert/update Firestore workouts in Room
         firestoreWorkouts.forEach { firestoreWorkout ->
-
             val workout = Workout(
                 id = firestoreWorkout.id.toInt(),
                 name = firestoreWorkout.name,
                 duration = firestoreWorkout.duration
             )
-
-            roomInsertWorkout(workout)
+            Room_Create_Workout(workout)
         }
     }
-    suspend fun roomSyncWorkoutExercises(firestoreWorkoutExercises : List<FirestoreWorkoutExercise>){
+    suspend fun Room_Sync_WorkoutExercises(firestoreWorkoutExercises : List<FirestoreWorkoutExercise>){
         firestoreWorkoutExercises.forEach{ firestoreExercise ->
 
 
@@ -144,10 +140,11 @@ class WorkoutRepository(
                 repetitions = firestoreExercise.repetitions
             )
 
-            workoutDao.insertWorkoutExerciseCrossRef(crossRef)
+            workoutDao.Create_WorkoutExercise_CrossRef(crossRef)
         }
     }
-
+    suspend fun Room_Create_WorkoutWithCrossRef(workout: Workout, exerciseIds: List<Int>): Long {
+        return workoutDao.Create_WorkoutWithCrossRef(workout, exerciseIds) }
 
     /// FIRESTORE
     ////////////////////////////////////////////
@@ -242,10 +239,6 @@ class WorkoutRepository(
         val snapshot = firestoreWorkoutExercisesCollection().whereEqualTo("workoutId", workoutId).get().await()
         snapshot.documents.forEach { document -> document.reference.delete().await() }
     }
-
-
-
-
 }
 
 

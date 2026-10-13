@@ -9,36 +9,28 @@ import com.example.android_playground.data.Workout
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
 
-class WorkoutViewModel(
-    private val repository: WorkoutRepository
-) : ViewModel(){
+class Workout_ViewModel(private val repository: Workout_Repository) : ViewModel(){
 
-    // @ Description: Create workout is used after the workout was inserted and now it is the time to add its exercises to its CrossRef table
-    fun createWorkout(workout : Workout, exerciseIds : List<Int>, onComplete: () -> Unit){
+    // Workout + WorkoutExerciseCrossRef Methods
+    ///////////////////////////////////////////
+
+    fun Create_Workout(workout : Workout, exerciseIds : List<Int>, onComplete: () -> Unit){
         viewModelScope.launch {
             repository.CREATE_Workout(workout = workout, exerciseIds = exerciseIds)
-
             onComplete()
         }
     }
-
-    fun getAllWorkouts(): Flow<List<Workout>> {
-        return repository.roomReadWorkouts()
+    fun Read_AllWorkouts(): Flow<List<Workout>> {
+        return repository.Room_Read_Workouts()
     }
-
-
-
-    fun deleteWorkout(workout: Workout, onComplete: () -> Unit) {
+    fun Delete_Workout(workout: Workout, onComplete: () -> Unit) {
         viewModelScope.launch {
             repository.DELETE_Workout(workout.id.toString())
             onComplete()
         }
     }
-
-    suspend fun syncWorkouts(){
+    suspend fun Sync_Workouts(){
         repository.SYNC_Workouts()
     }
-
-
 
 }

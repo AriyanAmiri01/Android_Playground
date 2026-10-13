@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 
-class AuthViewModelFactory (
-    private val repository : AuthRepository
+class Auth_ViewModelFactory (
+    private val repository : Auth_Repository
 ): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(Auth_ViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AuthViewModel(repository) as T
+            return Auth_ViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

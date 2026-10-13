@@ -11,9 +11,9 @@ import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
 import com.example.android_playground.data.WorkoutSetDetails
 import com.example.android_playground.adapters.X05_Main_WorkoutHistoryAdapter
-import com.example.android_playground.repository.ActiveWorkoutViewModel
-import com.example.android_playground.repository.ActiveWorkoutViewModelFactory
-import com.example.android_playground.repository.WorkoutSessionRepository
+import com.example.android_playground.repository.WorkoutSession_ViewModel
+import com.example.android_playground.repository.WorkoutSession_ViewModelFactory
+import com.example.android_playground.repository.WorkoutSession_Repository
 
 
 data class WorkoutHistoryExercise(
@@ -27,7 +27,7 @@ class K05_HistoryFragment :
     Fragment(R.layout.x05_main_frag_history) {
 
     private lateinit var viewModel:
-            ActiveWorkoutViewModel
+            WorkoutSession_ViewModel
 
     private lateinit var adapter:
             X05_Main_WorkoutHistoryAdapter
@@ -68,55 +68,22 @@ class K05_HistoryFragment :
             }
 
 
-        // 2. Configure RecyclerView.
-        val recyclerView =
-            view.findViewById<RecyclerView>(
-                R.id.workoutHistoryRecyclerView
-            )
-
-        recyclerView.layoutManager =
-            LinearLayoutManager(
-                requireContext()
-            )
-
-        recyclerView.adapter =
-            adapter
+        // 2. RecyclerView Stuffs
+        val recyclerView = view.findViewById<RecyclerView>(R.id.workoutHistoryRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = adapter
 
 
-        // 3. Get database.
-        val database =
-            WorkoutDatabase.getDatabase(
-                requireContext()
-            )
-
-
-        // 4. Repository.
-        val repository =
-            WorkoutSessionRepository(
-                database.workoutSessionDao()
-            )
-
-
-        // 5. ViewModel.
-        val factory =
-            ActiveWorkoutViewModelFactory(
-                repository
-            )
-
-        viewModel =
-            ViewModelProvider(
-                this,
-                factory
-            )[ActiveWorkoutViewModel::class.java]
+        // 3. Database Stuffs
+        val database = WorkoutDatabase.getDatabase(requireContext())
+        val repository = WorkoutSession_Repository(database.workoutSessionDao())
+        val factory = WorkoutSession_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[WorkoutSession_ViewModel::class.java]
 
 
         // 6. Load completed workouts.
-        viewModel.getCompletedWorkoutSessions {
-                sessions ->
-
-            adapter.submitList(
-                sessions
-            )
+        viewModel.Read_WorkoutSession_Completed { sessions ->
+            adapter.submitList(sessions)
         }
     }
 }

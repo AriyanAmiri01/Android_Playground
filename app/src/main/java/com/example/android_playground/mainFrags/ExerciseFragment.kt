@@ -11,16 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutDatabase
-import com.example.android_playground.repository.AuthRepository
-import com.example.android_playground.repository.ExerciseRepository
-import com.example.android_playground.repository.ExerciseViewModel
-import com.example.android_playground.repository.ExerciseViewModelFactory
+import com.example.android_playground.repository.Auth_Repository
+import com.example.android_playground.repository.Exercise_Repository
+import com.example.android_playground.repository.Exercise_ViewModel
+import com.example.android_playground.repository.Exercise_ViewModelFactory
 import kotlinx.coroutines.launch
 
 class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
 
     // Room variables
-    private lateinit var viewModel: ExerciseViewModel
+    private lateinit var viewModel: Exercise_ViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Call defualt constructor
@@ -33,13 +33,13 @@ class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
         // Room conection
         val databaseRef = WorkoutDatabase.getDatabase(requireContext())
         val exerciseDao = databaseRef.exerciseDao()
-        val repository = ExerciseRepository(exerciseDao)
-        val authRepo = AuthRepository()
-        val factory = ExerciseViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[ExerciseViewModel::class.java]
+        val repository = Exercise_Repository(exerciseDao)
+        val authRepo = Auth_Repository()
+        val factory = Exercise_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[Exercise_ViewModel::class.java]
 
         // Load the exercise
-        viewModel.getExerciseById(exerciseId){exercise ->
+        viewModel.Read_Exercise(exerciseId){exercise ->
             if(exercise != null){
                 // Get the view refences
                 val exerciseNameTextView = view.findViewById<TextView>(R.id.exerciseNameTextView)
@@ -50,7 +50,6 @@ class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
                 muscleGroupTextView.text = exercise.muscleGroup
 
                 viewLifecycleOwner.lifecycleScope.launch {
-
                     // Get download URL
                     val url = authRepo.getDownloadUrl(exercise.videoUrl.toString())
 
@@ -59,12 +58,7 @@ class ExerciseFragment : Fragment(R.layout.x03_sub_frag_exercise) {
                     videoView.setVideoURI(Uri.parse(url))
                     videoView.start()
                 }
-
-
-
-
             }else{
-                // Output error message
                 Log.e("ExerciseFragment", "Exercise not found: $exerciseId")
             }
         }

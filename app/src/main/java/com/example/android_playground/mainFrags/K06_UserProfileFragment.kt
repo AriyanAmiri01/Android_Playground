@@ -13,21 +13,25 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.android_playground.R
-import com.example.android_playground.repository.AuthRepository
-import com.example.android_playground.repository.AuthViewModel
-import com.example.android_playground.repository.AuthViewModelFactory
+import com.example.android_playground.repository.Auth_Repository
+import com.example.android_playground.repository.Auth_ViewModel
+import com.example.android_playground.repository.Auth_ViewModelFactory
 import android.app.Activity
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.android_playground.MainActivity
 import com.yalantis.ucrop.UCrop
-
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.example.android_playground.data.WorkoutDatabase
 
 
 class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
 
     // For Firebase connection
-    private lateinit var viewModel : AuthViewModel
+    private lateinit var viewModel : Auth_ViewModel
 
     private lateinit var profileImage : ImageView
 
@@ -55,9 +59,9 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
         super.onViewCreated(view, savedInstanceState)
 
         // Firebase communication
-        val repository = AuthRepository();
-        val factory = AuthViewModelFactory(repository);
-        viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
+        val repository = Auth_Repository();
+        val factory = Auth_ViewModelFactory(repository);
+        viewModel = ViewModelProvider(this, factory)[Auth_ViewModel::class.java]
 
 
         // Get Views
@@ -76,6 +80,25 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
             loginButton,
             notLoggedInText
         )
+
+        // Observe Firestore user profile
+        viewModel.userProfile.observe(viewLifecycleOwner) { userProfile ->
+
+            if (userProfile != null) {
+
+                profileName.text =
+                    "${userProfile.firstName} ${userProfile.lastName}"
+
+                profileUsername.text =
+                    "@${userProfile.username}"
+            }
+        }
+        // Load user profile from Firestore
+        if (viewModel.isUserLoggedIn()) {
+            viewModel.loadUserProfile()
+        }
+
+
         // Profile  image update
         profileImage.setOnClickListener {
             if(viewModel.isUserLoggedIn()){
@@ -89,17 +112,33 @@ class K06_UserProfileFragment : Fragment(R.layout.x06_main_frag_user_profile){
 
         // Implement logout button
         logoutButton.setOnClickListener {
-            // Logout from the firebase
-            viewModel.logoutUser()
 
-            // Update the UI
-            findNavController().navigate(
-                R.id.loginFragment,
-                null,
-                NavOptions.Builder()
-                    .setPopUpTo(R.id.nav_workout, true)
-                    .build()
-            )
+            viewLifecycleOwner.lifecycleScope.launch {
+
+                // Get the Room database
+                val database =
+                    WorkoutDatabase.getDatabase(requireContext())
+
+
+                // Clear all local Room data
+                withContext(Dispatchers.IO) {
+                    database.clearAllTables()
+                }
+
+
+                // Logout from Firebase
+                viewModel.logoutUser()
+
+
+                // Navigate to login
+                findNavController().navigate(
+                    R.id.loginFragment,
+                    null,
+                    NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_workout, true)
+                        .build()
+                )
+            }
         }
 
         // Implement login

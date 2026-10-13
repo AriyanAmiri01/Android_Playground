@@ -6,16 +6,16 @@ import androidx.lifecycle.ViewModelProvider
 
 
 // @ description: It is the class for creating the createWorkoutViewModel using exerciseRepository
-class ExerciseViewModelFactory(
-    private val repository: ExerciseRepository
+class Exercise_ViewModelFactory(
+    private val repository: Exercise_Repository
 ) : ViewModelProvider.Factory  // @note: It follows the android specific interface for factories
 {
     // @description: the function that creates the viewmodel for room communication
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        if (modelClass.isAssignableFrom(ExerciseViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(Exercise_ViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ExerciseViewModel(repository) as T
+            return Exercise_ViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

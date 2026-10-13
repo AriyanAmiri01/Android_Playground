@@ -15,3 +15,17 @@ data class FirestoreWorkoutExercise(
     val sets: Int = 3,
     val repetitions: Int = 10
 )
+
+
+data class UserProfile(
+
+    val uid: String = "",
+
+    val firstName: String = "",
+
+    val lastName: String = "",
+
+    val username: String = "",
+
+    val email: String = ""
+)
