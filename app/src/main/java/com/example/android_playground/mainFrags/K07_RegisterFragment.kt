@@ -1,5 +1,6 @@
 package com.example.android_playground.mainFrags
 
+
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -14,16 +15,17 @@ import com.example.android_playground.repository.Auth_Repository
 import com.example.android_playground.repository.Auth_ViewModel
 import com.example.android_playground.repository.Auth_ViewModelFactory
 
-class K01_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
-    private lateinit var viewModel : Auth_ViewModel
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Calling the child's onViewCreated functions
-        super.onViewCreated(view, savedInstanceState)
 
-        // Firebase communication
-        val repository = Auth_Repository()
-        val factory = Auth_ViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[Auth_ViewModel::class.java]
+class K07_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
+
+    // Variables
+    private lateinit var viewModel : Auth_ViewModel
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // Default onViewCreated constructor
+        super.onViewCreated(view, savedInstanceState)
 
 
         // Get the input fields
@@ -36,6 +38,12 @@ class K01_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
         val loginTextView = view.findViewById<TextView>(R.id.loginTextView)
 
 
+        // Firebase communication
+        val repository = Auth_Repository()
+        val factory = Auth_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[Auth_ViewModel::class.java]
+
+
         //  Add the register button event listener
         registerButton.setOnClickListener {
             val firstName = firstNameEditText.text.toString().trim()
@@ -43,59 +51,29 @@ class K01_RegisterFragment : Fragment(R.layout.x07_main_frag_register){
             val username = usernameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString()
-
             if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-
-                Toast.makeText(
-                    requireContext(),
-                    "Please fill in all fields",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             // Register user
-            viewModel.registerUser(
-                firstName,
-                lastName,
-                username,
-                email,
-                password
-            )
+            viewModel.registerUser(firstName, lastName, username, email, password)
         }
         loginTextView.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_registerFragment_to_loginFragment
-            )
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
 
         // Get debug information from the authResult livedata
         viewModel.authResult.observe(viewLifecycleOwner) { result ->
-
             val success = result.first
             val error = result.second
 
             if (success) {
-
-                Toast.makeText(
-                    requireContext(),
-                    "Account created successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                findNavController().navigate(
-                    R.id.action_registerFragment_to_nav_workout
-                )
-
+                Toast.makeText(requireContext(), "Account created successfully", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_registerFragment_to_nav_workout)
             } else {
-
-                Toast.makeText(
-                    requireContext(),
-                    error ?: "Registration failed",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(requireContext(), error ?: "Registration failed", Toast.LENGTH_LONG).show()
             }
         }
     }

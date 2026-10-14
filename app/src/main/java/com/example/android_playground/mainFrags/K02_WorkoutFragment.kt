@@ -24,19 +24,19 @@ import kotlinx.coroutines.launch
 
 class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
 
-    // Room + Firestore
+    // Variables
     private lateinit var viewModel: Workout_ViewModel
     private lateinit var activeWorkoutViewModel: WorkoutSession_ViewModel
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Notify the childrens?
+
+        // Default onViewCreated constructor
         super.onViewCreated(view, savedInstanceState)
 
-        // Get the database
-        val database = WorkoutDatabase.getDatabase(requireContext())
 
-        // ROOM COMMUNICATIONS
+        // Database stuffs
+        val database = WorkoutDatabase.getDatabase(requireContext())
         val workoutRepository = Workout_Repository(database.workoutDao())
         val sessionRepository = WorkoutSession_Repository(database.workoutSessionDao())
         val workoutFactory = Workout_ViewModelFactory(workoutRepository)
@@ -44,54 +44,39 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
         viewModel = ViewModelProvider(this, workoutFactory)[Workout_ViewModel::class.java]
         activeWorkoutViewModel = ViewModelProvider(this, activeWorkoutFactory)[WorkoutSession_ViewModel::class.java]
 
-        // Create the recyclerView
+
+        // RecyclerView stuffs
         val recyclerView = view.findViewById<RecyclerView>(R.id.workoutRecyclerView)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        // Attach an empty adapter immediately to fix warnings
+        recyclerView.adapter = X02_Main_WorkoutAdapter(
+            workouts = emptyList(),
+            onDeleteClick = { workout -> viewModel.Delete_Workout(workout) {} },
+            onWorkoutClick = { workout ->
+                val bundle = Bundle().apply { putInt("workoutId", workout.id) }
+                findNavController().navigate(R.id.action_workoutLibraryFragment_to_workoutDetailsFragment, bundle) },
+            onStartClick = { workout ->
+                activeWorkoutViewModel.Create_WorkoutSession(workout.id) { sessionId ->
+                    val bundle = Bundle().apply { putInt("workoutId", workout.id);putInt("sessionId", sessionId); }
+                    findNavController().navigate(R.id.action_workoutLibraryFragment_to_activeWorkoutFragment, bundle) } }
+        )
 
-
-        // Observe workouts
+        // Sync and Read workouts
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.Sync_Workouts()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 viewModel.Read_AllWorkouts().collect { workouts ->
-
                     val adapter = X02_Main_WorkoutAdapter(
                         workouts = workouts,
-
-                        onDeleteClick = { workout ->
-                            viewModel.Delete_Workout(workout) {
-                            }
-                        },
-
-                        onWorkoutClick = { workout ->
-
-                            val bundle = Bundle().apply {
-                                putInt(
-                                    "workoutId",
-                                    workout.id
-                                )
-                            }
-
-                            findNavController().navigate(
-                                R.id.action_workoutLibraryFragment_to_workoutDetailsFragment,
-                                bundle
-                            )
-                        },
-
-                        onStartClick = { workout ->
-
-                            activeWorkoutViewModel.Create_WorkoutSession(workout.id) { sessionId ->
-
-                                val bundle = Bundle().apply {
-                                    putInt("workoutId", workout.id)
+                        onDeleteClick = { workout -> viewModel.Delete_Workout(workout) {} },
+                        onWorkoutClick = { workout -> val bundle = Bundle().apply{ putInt("workoutId", workout.id) }
+                            findNavController().navigate(R.id.action_workoutLibraryFragment_to_workoutDetailsFragment, bundle) },
+                        onStartClick = { workout -> activeWorkoutViewModel.Create_WorkoutSession(workout.id) { sessionId ->
+                                val bundle = Bundle().apply { putInt("workoutId", workout.id)
                                     putInt("sessionId", sessionId)
                                 }
-
-                                findNavController().navigate(
-                                    R.id.action_workoutLibraryFragment_to_activeWorkoutFragment,
-                                    bundle
-                                )
+                                findNavController().navigate(R.id.action_workoutLibraryFragment_to_activeWorkoutFragment, bundle)
                             }
                         }
                     )
@@ -102,22 +87,10 @@ class K02_WorkoutFragment : Fragment(R.layout.x02_main_frag_workouts) {
         }
 
 
-
-
         // Create workout button
-        val createWorkoutButton =
-            view.findViewById<Button>(
-                R.id.createWorkoutButton
-            )
+        val createWorkoutButton = view.findViewById<Button>(R.id.createWorkoutButton)
         createWorkoutButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_workoutLibraryFragment_to_createWorkoutFragment
-            )
+            findNavController().navigate(R.id.action_workoutLibraryFragment_to_createWorkoutFragment)
         }
-
-
     }
-
-
-
 }

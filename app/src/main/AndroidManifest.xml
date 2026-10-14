@@ -13,7 +13,7 @@
         android:theme="@style/Base.Theme.Android_Playground">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".mainFrags.K00_MainActivity"
             android:exported="true">
 
             <intent-filter>

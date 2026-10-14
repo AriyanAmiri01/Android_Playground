@@ -21,32 +21,27 @@ class K03_ExercisesFragment : Fragment(R.layout.x03_main_frag_exercises) {
     private lateinit var adapter: X03_Main_ExerciseAdapter
     private lateinit var exerciseViewModel: Exercise_ViewModel
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Default onViewCreated Constructor stuffs
+
+        // Default onViewCreated constructor
         super.onViewCreated(view, savedInstanceState)
 
-        // Recycler view stuffs
-        recyclerView = view.findViewById(R.id.exercisesRecyclerView)
-        adapter = X03_Main_ExerciseAdapter(emptyList()) { exerciseId ->
-
-            val bundle = Bundle().apply {
-                putInt("exerciseId", exerciseId)
-            }
-
-            findNavController().navigate(
-                R.id.exerciseFragment,
-                bundle
-            )
-        }
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
 
         // Database stuffs
         val database = WorkoutDatabase.getDatabase(requireContext())
         val repository = Exercise_Repository(database.exerciseDao())
         exerciseViewModel = ViewModelProvider(this, Exercise_ViewModelFactory(repository))[Exercise_ViewModel::class.java]
 
-        // Fill the adapter
+
+        // Recycler view stuffs
+        recyclerView = view.findViewById(R.id.exercisesRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = X03_Main_ExerciseAdapter(emptyList()) { exerciseId ->
+            val bundle = Bundle().apply { putInt("exerciseId", exerciseId) }
+            findNavController().navigate(R.id.exerciseFragment, bundle)
+        }
+        recyclerView.adapter = adapter
         exerciseViewModel.Read_AllExercises { exercises ->
             adapter.updateExercises(exercises)
         }

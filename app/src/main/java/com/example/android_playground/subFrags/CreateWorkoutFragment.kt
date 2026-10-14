@@ -1,5 +1,6 @@
 package com.example.android_playground.subFrags
 
+
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -24,17 +25,35 @@ import com.example.android_playground.repository.Exercise_ViewModelFactory
 
 class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
 
+    // Variables
     private val selectedExercises = mutableListOf<Exercise>()
     private lateinit var selectedAdapter: X02_Sub_SelectedExerciseAdapter
     lateinit var exerciseViewModel: Exercise_ViewModel;
     private lateinit var workoutViewModel : Workout_ViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Notify all childrens
+
+        // Default onViewCreated constructor
         super.onViewCreated(view, savedInstanceState)
 
 
-        // Setup Selected Exercises RecyclerView
+        // Fetch views
+        val workoutNameEditText = view.findViewById<EditText>(R.id.workoutNameEditText)
+        val workoutDurationEditText = view.findViewById<EditText>(R.id.workoutDurationEditText)
+        val createWorkoutButton = view.findViewById<Button>(R.id.createWorkoutButton)
+
+
+        // Database stuffs
+        val database = WorkoutDatabase.getDatabase(requireContext())
+        val exerciseRepository = Exercise_Repository(database.exerciseDao())
+        val workoutRepository = Workout_Repository(database.workoutDao())
+        val exerciseViewModelFactory = Exercise_ViewModelFactory(exerciseRepository)
+        val workoutLibraryViewModelFactory = Workout_ViewModelFactory(workoutRepository)
+        exerciseViewModel = ViewModelProvider(this, exerciseViewModelFactory)[Exercise_ViewModel::class.java]
+        workoutViewModel = ViewModelProvider(this, workoutLibraryViewModelFactory)[Workout_ViewModel::class.java]
+
+
+        // RecyclerView Stuffs
         val selectedRecyclerView = view.findViewById<RecyclerView>(R.id.selectedExercisesRecyclerView)
         selectedAdapter = X02_Sub_SelectedExerciseAdapter(exercises = selectedExercises, onRemoveClick = { exercise ->
 
@@ -44,27 +63,11 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
         })
         selectedRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         selectedRecyclerView.adapter = selectedAdapter
-
-
-        // Setup Available Exercises RecyclerView
         val availableRecyclerView = view.findViewById<RecyclerView>(R.id.availableExercisesRecyclerView)
         availableRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
-        // Instantiate database and repositories
-        val database = WorkoutDatabase.getDatabase(requireContext())
-        val exerciseRepository = Exercise_Repository(database.exerciseDao())
-        val workoutRepository = Workout_Repository(database.workoutDao())
-
-
-        // Instantiate viewModels
-        val exerciseViewModelFactory = Exercise_ViewModelFactory(exerciseRepository)
-        val workoutLibraryViewModelFactory = Workout_ViewModelFactory(workoutRepository)
-        exerciseViewModel = ViewModelProvider(this, exerciseViewModelFactory)[Exercise_ViewModel::class.java]
-        workoutViewModel = ViewModelProvider(this, workoutLibraryViewModelFactory)[Workout_ViewModel::class.java]
-
-
-        // Load exercises from Room and attach adapter
+        // Load available addapter
         exerciseViewModel.Read_AllExercises { exercises ->
             val availableAdapter = X02_Sub_ExerciseSelectionAdapter(exercises = exercises, onAddClick = { exercise ->
                     if (!selectedExercises.contains(exercise)) {
@@ -76,42 +79,36 @@ class CreateWorkoutFragment : Fragment(R.layout.x02_sub_frag_create_workout) {
         }
 
 
-        // Setup Create Workout Button
-        val workoutNameEditText = view.findViewById<EditText>(R.id.workoutNameEditText)
-        val workoutDurationEditText = view.findViewById<EditText>(R.id.workoutDurationEditText)
-        val createWorkoutButton = view.findViewById<Button>(R.id.createWorkoutButton)
-
-        // Add the eventListener
+        // Event listeners
         createWorkoutButton.setOnClickListener{
-            // Fill structure
+
+            // 1. Get values
             val workoutName = workoutNameEditText.text.toString().trim()
+            val durationText = workoutDurationEditText.text.toString().trim()
+            val duration = durationText.toInt()
+
+            // 2. Validated values
             if(workoutName.isEmpty()){
                 workoutNameEditText.error = "Enter a workout name"
                 return@setOnClickListener
             }
-
-            val durationText = workoutDurationEditText.text.toString().trim()
             if (durationText.isEmpty()) {
                 workoutDurationEditText.error = "Enter a duration"
                 return@setOnClickListener
             }
-            val duration = durationText.toInt()
 
-            // Create the workout
-            val workout = Workout(
-                name = workoutName,
-                duration = duration
-            )
-
-            // map its exercises
+            // 3. Create data to be passed to viewModel
+            val workout = Workout(name = workoutName, duration = duration)
             val exerciseIds = selectedExercises.map { exercise ->
                 exercise.id
             }
 
-            // Let the viewmodel handle the rest while adding a callback function for reverse navigation
-            workoutViewModel.Create_Workout(workout = workout, exerciseIds = exerciseIds, onComplete = {
-                    parentFragmentManager.popBackStack()
-                })
+            // 4. Create workout in database
+            workoutViewModel.Create_Workout(
+                workout = workout,
+                exerciseIds = exerciseIds,
+                onComplete = { parentFragmentManager.popBackStack() }
+            )
         }
 
 

@@ -1,4 +1,4 @@
-package com.example.android_playground.mainFrags
+package com.example.android_playground.subFrags
 
 import android.net.Uri
 import android.os.Bundle

@@ -23,65 +23,39 @@ data class WorkoutHistoryExercise(
 )
 
 
-class K05_HistoryFragment :
-    Fragment(R.layout.x05_main_frag_history) {
+class K05_HistoryFragment : Fragment(R.layout.x05_main_frag_history) {
 
-    private lateinit var viewModel:
-            WorkoutSession_ViewModel
-
-    private lateinit var adapter:
-            X05_Main_WorkoutHistoryAdapter
+    // Variables
+    private lateinit var viewModel: WorkoutSession_ViewModel
+    private lateinit var adapter: X05_Main_WorkoutHistoryAdapter
 
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-            view,
-            savedInstanceState
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // Default onViewCreated constructor
+        super.onViewCreated(view, savedInstanceState)
 
 
-        // 1. Create adapter.
-        adapter =
-            X05_Main_WorkoutHistoryAdapter { session ->
-
-                val bundle =
-                    Bundle().apply {
-
-                        putInt(
-                            "sessionId",
-                            session.sessionId
-                        )
-
-                        putString(
-                            "workoutName",
-                            session.workoutName
-                        )
-                    }
-
-                findNavController().navigate(
-                    R.id.action_historyFragment_to_workoutHistoryDetailsFragment,
-                    bundle
-                )
-            }
-
-
-        // 2. RecyclerView Stuffs
-        val recyclerView = view.findViewById<RecyclerView>(R.id.workoutHistoryRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
-
-
-        // 3. Database Stuffs
+        // Database Stuffs
         val database = WorkoutDatabase.getDatabase(requireContext())
         val repository = WorkoutSession_Repository(database.workoutSessionDao())
         val factory = WorkoutSession_ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[WorkoutSession_ViewModel::class.java]
 
 
-        // 6. Load completed workouts.
+        // RecyclerView Stuffs
+        val recyclerView = view.findViewById<RecyclerView>(R.id.workoutHistoryRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = X05_Main_WorkoutHistoryAdapter { session ->
+            val bundle = Bundle()
+            bundle.putInt("sessionId", session.sessionId)
+            bundle.putString("workoutName", session.workoutName)
+            findNavController().navigate(R.id.action_historyFragment_to_workoutHistoryDetailsFragment, bundle)
+        }
+        recyclerView.adapter = adapter
+
+
+        // Load completed workouts.
         viewModel.Read_WorkoutSession_Completed { sessions ->
             adapter.submitList(sessions)
         }

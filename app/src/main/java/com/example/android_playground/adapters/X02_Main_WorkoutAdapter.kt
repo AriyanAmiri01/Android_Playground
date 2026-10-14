@@ -16,9 +16,9 @@ class X02_Main_WorkoutAdapter(
     private val onStartClick: (Workout) -> Unit
 ) : RecyclerView.Adapter<X02_Main_WorkoutAdapter.WorkoutViewHolder>()
 {
-    // @ description Prepare the data before passed to the recyclerView
+
+    // 1. Wrapper class for one rercyclerView  item View
     class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // @ description represent one displayed item
         val workoutName: TextView = itemView.findViewById(R.id.workoutName)
         val workoutDuration: TextView = itemView.findViewById(R.id.workoutDuration)
         val startButton: Button = itemView.findViewById(R.id.StartWorkoutButton)
@@ -26,15 +26,14 @@ class X02_Main_WorkoutAdapter(
     }
 
 
-    // @ description Responsable for create a single ViewHolder
+    // 2. inflate the xml layout into a view and wraps that inside a viewholder wrapper and returns it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkoutViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.x02_main_item_workout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.x02_main_item_workout, parent, false)
         return WorkoutViewHolder(view)
     }
 
 
-    // @ description responsable for filling one single item
+    // 3. Fills the actual data
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         // Fetch the workout
         val workout = workouts[position]
@@ -50,7 +49,7 @@ class X02_Main_WorkoutAdapter(
     }
 
 
-    // @ description responsable for telling the recycler view how many items are there
+    // 4. description responsable for telling the recycler view how many items are there which is used by recyclerView
     override fun getItemCount(): Int {
         return workouts.size
     }

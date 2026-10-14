@@ -14,98 +14,47 @@ import com.example.android_playground.repository.WorkoutSession_ViewModel
 import com.example.android_playground.repository.WorkoutSession_ViewModelFactory
 import com.example.android_playground.repository.WorkoutSession_Repository
 
-class WorkoutHistoryDetailsFragment :
-    Fragment(R.layout.x05_sub_frag_workout_history_details) {
 
-    private lateinit var viewModel:
-            WorkoutSession_ViewModel
+class WorkoutHistoryDetailsFragment : Fragment(R.layout.x05_sub_frag_workout_history_details) {
 
-    private lateinit var adapter:
-            WorkoutHistoryDetailsAdapter
+    // Variables
+    private lateinit var viewModel: WorkoutSession_ViewModel
+    private lateinit var adapter: WorkoutHistoryDetailsAdapter
 
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-            view,
-            savedInstanceState
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // Default onViewCreated constructor
+        super.onViewCreated(view, savedInstanceState)
 
 
-        // 1. Get session information.
-        val sessionId =
-            arguments?.getInt("sessionId")
-                ?: return
-
-        val workoutName =
-            arguments?.getString("workoutName")
-                ?: "Workout"
+        // Get passed argument
+        val sessionId = arguments?.getInt("sessionId") ?: return
+        val workoutName = arguments?.getString("workoutName") ?: "Workout"
 
 
-        // 2. Set title.
-        val title =
-            view.findViewById<TextView>(
-                R.id.historyDetailsTitle
-            )
-
+        // Fetch views
+        val title = view.findViewById<TextView>(R.id.historyDetailsTitle)
         title.text = workoutName
 
 
-        // 3. Create adapter.
-        adapter =
-            WorkoutHistoryDetailsAdapter()
+        // RecyclerView stuff
+        val recyclerView = view.findViewById<RecyclerView>(R.id.historyDetailsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = WorkoutHistoryDetailsAdapter()
+        recyclerView.adapter = adapter
 
 
-        // 4. Configure RecyclerView.
-        val recyclerView =
-            view.findViewById<RecyclerView>(
-                R.id.historyDetailsRecyclerView
-            )
-
-        recyclerView.layoutManager =
-            LinearLayoutManager(
-                requireContext()
-            )
-
-        recyclerView.adapter =
-            adapter
+        // Database stuffs
+        val database = WorkoutDatabase.getDatabase(requireContext())
+        val repository = WorkoutSession_Repository(database.workoutSessionDao())
+        val factory = WorkoutSession_ViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[WorkoutSession_ViewModel::class.java]
 
 
-        // 5. Database.
-        val database =
-            WorkoutDatabase.getDatabase(
-                requireContext()
-            )
-
-
-        // 6. Repository.
-        val repository =
-            WorkoutSession_Repository(
-                database.workoutSessionDao()
-            )
-
-
-        // 7. ViewModel.
-        val factory =
-            WorkoutSession_ViewModelFactory(
-                repository
-            )
-
-        viewModel =
-            ViewModelProvider(
-                this,
-                factory
-            )[WorkoutSession_ViewModel::class.java]
-
-
-        // 8. Load performed sets.
+        // Load the adapter
         viewModel.Read_WorkoutSet_WorkoutSetDetails(sessionId) { sets ->
-
-            adapter.submitList(
-                sets
-            )
+            adapter.submitList(sets)
         }
     }
 }

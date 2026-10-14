@@ -10,149 +10,69 @@ import com.example.android_playground.R
 import com.example.android_playground.data.WorkoutSetDetails
 
 
-data class WorkoutHistoryExercise(
-    val exerciseId: Int,
-    val exerciseName: String,
-    val sets: List<WorkoutSetDetails>
-)
+data class WorkoutHistoryExercise(val exerciseId: Int, val exerciseName: String, val sets: List<WorkoutSetDetails>)
 
 
-class WorkoutHistoryDetailsAdapter :
-    RecyclerView.Adapter<WorkoutHistoryDetailsAdapter.HistoryDetailsViewHolder>() {
+class WorkoutHistoryDetailsAdapter : RecyclerView.Adapter<WorkoutHistoryDetailsAdapter.HistoryDetailsViewHolder>() {
+
+    // Variables
+    private var exercises: List<WorkoutHistoryExercise> = emptyList()
 
 
-    private var exercises: List<WorkoutHistoryExercise> =
-        emptyList()
-
-
-    class HistoryDetailsViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        val exerciseName: TextView =
-            itemView.findViewById(
-                R.id.historyExerciseName
-            )
-
-        val setsContainer: LinearLayout =
-            itemView.findViewById(
-                R.id.historySetsContainer
-            )
+    // 1. Wrapper class for one rercyclerView  item View
+    class HistoryDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val exerciseName: TextView = itemView.findViewById(R.id.historyExerciseName)
+        val setsContainer: LinearLayout = itemView.findViewById(R.id.historySetsContainer)
     }
 
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): HistoryDetailsViewHolder {
-
-        val view =
-            LayoutInflater
-                .from(parent.context)
-                .inflate(
-                    R.layout.x05_sub_item_workout_history_set,
-                    parent,
-                    false
-                )
-
+    // 2. inflate the xml layout into a view and wraps that inside a viewholder wrapper and returns it
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryDetailsViewHolder {
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.x05_sub_item_workout_history_set, parent, false)
         return HistoryDetailsViewHolder(view)
     }
 
 
-    override fun onBindViewHolder(
-        holder: HistoryDetailsViewHolder,
-        position: Int
-    ) {
+    // 3. Fills the actual data
+    override fun onBindViewHolder(holder: HistoryDetailsViewHolder, position: Int) {
+        val exercise = exercises[position]
 
-        val exercise =
-            exercises[position]
-
-
-        // Exercise name
-        holder.exerciseName.text =
-            exercise.exerciseName
-
-
-        /*
-         * RecyclerView reuses ViewHolders,
-         * so remove rows belonging to the
-         * previously displayed exercise.
-         */
+        holder.exerciseName.text = exercise.exerciseName
         holder.setsContainer.removeAllViews()
-
-
-        // Create one row for each performed set.
         exercise.sets.forEach { workoutSet ->
 
-            val setView =
-                LayoutInflater
-                    .from(holder.itemView.context)
-                    .inflate(
-                        R.layout.x05_sub_item_workout_history_set_row,
-                        holder.setsContainer,
-                        false
-                    )
+            // Fetch item view references
+            val setView = LayoutInflater
+                .from(holder.itemView.context)
+                .inflate(R.layout.x05_sub_item_workout_history_set_row, holder.setsContainer, false)
+            val setNumber = setView.findViewById<TextView>(R.id.historySetNumber)
+            val repetitions = setView.findViewById<TextView>(R.id.historySetRepetitions)
 
-
-            val setNumber =
-                setView.findViewById<TextView>(
-                    R.id.historySetNumber
-                )
-
-            val repetitions =
-                setView.findViewById<TextView>(
-                    R.id.historySetRepetitions
-                )
-
-
-            setNumber.text =
-                "Set ${workoutSet.setNumber}"
-
-            repetitions.text =
-                "${workoutSet.repetitions} reps"
-
-
-            holder.setsContainer.addView(
-                setView
-            )
+            // Assign their values
+            setNumber.text = "Set ${workoutSet.setNumber}"
+            repetitions.text = "${workoutSet.repetitions} reps"
+            holder.setsContainer.addView(setView)
         }
     }
 
 
+    // 4. responsable for telling the recycler view how many items are there which is used by recyclerView
     override fun getItemCount(): Int {
         return exercises.size
     }
 
 
-    fun submitList(
-        workoutSets: List<WorkoutSetDetails>
-    ) {
-
-        /*
-         * Group every set belonging to the
-         * same exercise.
-         */
-        exercises =
-            workoutSets
-                .groupBy {
-                    it.exerciseId
+    // 5. Sumbit callback for loading the adapter
+    fun submitList(workoutSets: List<WorkoutSetDetails>) {
+        exercises = workoutSets.groupBy { it.exerciseId }
+            .map { (_, sets) ->
+                WorkoutHistoryExercise(
+                    exerciseId = sets.first().exerciseId,
+                    exerciseName = sets.first().exerciseName,
+                    sets = sets.sortedBy { it.setNumber })
                 }
-                .map { (_, sets) ->
-
-                    WorkoutHistoryExercise(
-                        exerciseId =
-                            sets.first().exerciseId,
-
-                        exerciseName =
-                            sets.first().exerciseName,
-
-                        sets =
-                            sets.sortedBy {
-                                it.setNumber
-                            }
-                    )
-                }
-
 
         notifyDataSetChanged()
     }

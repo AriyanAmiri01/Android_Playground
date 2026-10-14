@@ -10,13 +10,8 @@
 
     <!--==[MAIN FRAGMENTS]==-->
         <fragment
-            android:id="@+id/createWorkoutFragment"
-            android:name="com.example.android_playground.subFrags.CreateWorkoutFragment"
-            android:label="Create Workout">
-        </fragment>
-        <fragment
             android:id="@+id/loginFragment"
-            android:name="com.example.android_playground.mainFrags.K00_LoginFragment"
+            android:name="com.example.android_playground.mainFrags.K01_LoginFragment"
             android:label="LoginFragment">
             <action
                 android:id="@+id/action_loginFragment_to_registerFragment"
@@ -27,7 +22,7 @@
         </fragment>
         <fragment
             android:id="@+id/registerFragment"
-            android:name="com.example.android_playground.mainFrags.K01_RegisterFragment"
+            android:name="com.example.android_playground.mainFrags.K07_RegisterFragment"
             android:label="RegisterFragment">
             <action
                 android:id="@+id/action_registerFragment_to_loginFragment"
@@ -89,6 +84,11 @@
 
     <!--==[SUB FRAGMENTS]==-->
     <fragment
+        android:id="@+id/createWorkoutFragment"
+        android:name="com.example.android_playground.subFrags.CreateWorkoutFragment"
+        android:label="Create Workout">
+    </fragment>
+    <fragment
         android:id="@+id/workoutDetailsFragment"
         android:name="com.example.android_playground.subFrags.WorkoutDetailsFragment"
         android:label="Workout Details">
@@ -108,7 +108,7 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseFragment"
-        android:name="com.example.android_playground.adapters.ExerciseFragment"
+        android:name="com.example.android_playground.subFrags.ExerciseFragment"
         android:label="Exercise">
 
         <argument

@@ -1,4 +1,4 @@
-package com.example.android_playground
+package com.example.android_playground.mainFrags
 
 import android.net.Uri
 import android.os.Bundle
@@ -6,18 +6,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.GravityCompat
-import com.google.android.material.navigation.NavigationView
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.appbar.MaterialToolbar
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
+import com.example.android_playground.R
 import com.example.android_playground.repository.Auth_Repository
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
-
-class MainActivity : AppCompatActivity() {
+class K00_MainActivity : AppCompatActivity() {
 
     private lateinit var navProfileImage: ImageView
     private lateinit var navUsername: TextView
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         navUsername = headerView.findViewById<TextView>(R.id.navUsername)
         navEmail = headerView.findViewById<TextView>(R.id.navEmail)
 
+        updateNavigationDrawer()
 
         // Get current user, display username with profile
         val repository = Auth_Repository()
@@ -64,11 +66,8 @@ class MainActivity : AppCompatActivity() {
 
 
         //  Get navigation instances
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
-
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
-
         if (savedInstanceState == null) {
 
             val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
@@ -101,7 +100,16 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    private fun updateNavigationDrawer() {
 
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+        navigationView.menu.findItem(R.id.nav_workout).isVisible = isLoggedIn
+        navigationView.menu.findItem(R.id.nav_exercises).isVisible = isLoggedIn
+        navigationView.menu.findItem(R.id.nav_active_workout).isVisible = isLoggedIn
+        navigationView.menu.findItem(R.id.nav_history).isVisible = isLoggedIn
+        navigationView.menu.findItem(R.id.nav_profile).isVisible = isLoggedIn
+    }
     // Update only the drawer profile image
     fun updateDrawerProfileImage(uri: Uri) {
 
